@@ -22,7 +22,7 @@ export default function Home() {
             <CustomWalletButtons />
           </div>
           <div>
-            <SvgIllustration className=" w-full h-full absolute inset-0 " />
+            <SvgIllustration className=" w-full h-full absolute inset-0 pointer-events-none" />
           </div>
         </div>
       </main>

@@ -12,7 +12,7 @@ export function SidebarRoot({ children }: { children: React.ReactNode }) {
   return (
     <>
       {size && size && size.width && (
-        <Drawer.Root direction="left" open={getIsOpen(size.width <= 768)} modal={false}>
+        <Drawer.Root direction="left" open={getIsOpen(size.width <= 768)} modal={size.width <= 768}>
           {children}
         </Drawer.Root>
       )}
