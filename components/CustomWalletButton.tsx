@@ -13,7 +13,7 @@ export const CustomWalletButtons = () => {
   return (
     <button
       onClick={handleClick}
-      className="transition-all ease-out duration-250 group min-w-32 w-full overflow-hidden  border-transparent bg-white text-white active:brightness-[85%] S"
+      className="transition-all ease-out duration-250 group min-w-32 w-full overflow-hidden  border-transparent bg-white text-white active:brightness-[85%] shadow-lg shadow-red-500 drop-shadow-xl"
       style={{
         clipPath:
           "polygon(0% 0%, calc(100% - 15px) 0%, 100% 15px, 100% 100%, 15px 100%, 0% calc(100% - 15px), 0% 100%, 0% 0%)",

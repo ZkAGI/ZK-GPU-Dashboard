@@ -1,4 +1,7 @@
-<svg width="835" height="609" viewBox="0 0 835 609" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const Illustration = () =>{
+    
+    return (
+        <svg width="835" height="609" viewBox="0 0 835 609" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full absolute inset-0 pointer-events-none">
 <g filter="url(#filter0_f_234_2012)">
 <circle cx="417.199" cy="417.801" r="117.199" fill="#643ADE"/>
 </g>
@@ -51,3 +54,7 @@
 </filter>
 </defs>
 </svg>
+        
+
+    )
+} 

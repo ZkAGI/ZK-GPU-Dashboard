@@ -1,14 +1,14 @@
 import { CardItem, cardData } from "@/data/cardData";
-import SvgIonRocketSharp from "@/src/components/icons/IonRocketSharp";
-import SvgMaterialSymbolsExplore from "@/src/components/icons/MaterialSymbolsExplore";
-import SvgVector from "@/src/components/icons/Vector";
+import { Rocket } from '../components/icons/Rocket';
+import { Explore } from "./icons/Explore";
 import React from "react";
-import SvgDots from '../src/components/icons/Dots';
+import SvgDots from '../components/icons/Dots';
+import {Vector} from './icons/Vector'
 
 
 const Card = () => {
   return (
-    <div className="flex flex-row justify-around gap-12 mx-4 font-ttfirs">
+    <div className="flex flex-col md:flex-row justify-around gap-12 mx-4 font-ttfirs">
       {cardData.map((card, index) => (
         <div
           key={index}
@@ -18,13 +18,13 @@ const Card = () => {
           <div className="w-80 h-48 rounded-lg p-4 m-0.5 bg-gradient-to-b from-[#010921] to-[#12152B] text-white">
             <div className="pb-2">
               {card.title === "Getting started with ZkAGI" && (
-                <SvgIonRocketSharp className="size-6 text-white" />
+                <Rocket/>
               )}
               {card.title === "Explore the Marketplace" && (
-                <SvgMaterialSymbolsExplore className="size-10 text-white" />
+                <Explore/>
               )}
               {card.title === "Learn more about ZkAGI" && (
-                <SvgVector className="size-5 text-white" />
+                <Vector />
               )}
             </div>
             <div className="text-lg pb-4">{card.title}</div>
