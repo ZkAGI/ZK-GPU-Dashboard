@@ -1,14 +1,13 @@
 "use client";
 
-import Card from "@/components/card";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import Card from "../components/card";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden relative">
       <main className="flex-grow">
         <div className="mx-8 p-2 mt-5 flex flex-col justify-center items-center gap-10">
-          <div className="text-3xl"><h1>Welcome to ZKAGI</h1></div>
+          <div className="text-3xl"><h1>Welcome to ZkAGI</h1></div>
           <div><Card/></div>
         </div>
       </main>
@@ -18,3 +17,4 @@ export default function Home() {
     </div>
   );
 }
+
