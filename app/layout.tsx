@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { Sidebar, SidebarRoot } from "@/components/sidebar";
+import AppWalletProvider from "@/components/AppWalletProvider";
 
 export const metadata: Metadata = {
   title: "ZkAGI Console",
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[#000D33] ">
-        <SidebarRoot>
-          <Navbar />
-          <Sidebar />
-        </SidebarRoot>
-        <div className="md:pl-[280px]">{children}</div>
+        <AppWalletProvider>
+          <SidebarRoot>
+            <Navbar />
+            <Sidebar />
+          </SidebarRoot>
+          <div className="md:pl-[280px]">{children}</div>
+        </AppWalletProvider>
       </body>
     </html>
   );

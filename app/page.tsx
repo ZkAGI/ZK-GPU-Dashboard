@@ -1,6 +1,7 @@
 "use client";
 
 import Card from "@/components/card";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 export default function Home() {
   return (
