@@ -1,0 +1,11 @@
+export { default as Svg3Friends } from "./3Friends";
+export { default as Vector1 } from "./Vector1";
+export { default as Vector11 } from "./Vector11";
+export { default as Vector2 } from "./Vector2";
+export { default as Vector3 } from "./Vector3";
+export { default as Vector4 } from "./Vector4";
+export { default as Vector5 } from "./Vector5";
+export { default as Vector6 } from "./Vector6";
+export { default as Vector7 } from "./Vector7";
+export { default as Vector } from "./Vector";
+export { default as Vector10 } from "./Vector10";

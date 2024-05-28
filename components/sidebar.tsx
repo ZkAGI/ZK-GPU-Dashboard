@@ -23,27 +23,30 @@ export function SidebarRoot({ children }: { children: React.ReactNode }) {
 interface SidebarItemProps {
   name: string;
   icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export function SidebarItem(props: SidebarItemProps) {
-  const { name, icon } = props;
+  const { name, icon, disabled = false } = props;
   const { setIsOpen } = useSideBarNavStore();
   const size = useWindowSize();
 
   const onClick = () => {
-    if (size && size.width && size.width <= 768) {
+    if (!disabled  && size && size.width && size.width <= 768) {
       setIsOpen(false);
     }
   };
 
   return (
     <div
-      className="py-1.5 px-4 text-white rounded-md hover:bg-[#643ADE] transition-colors cursor-pointer flex space-x-2 items-center"
-      onClick={onClick}
-    >
-      {icon && <div className="[&>svg]:size-4">{icon}</div>}
-      <p>{name}</p>
-    </div>
+  className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${
+    disabled ? "text-gray-500 cursor-default" : "text-white hover:bg-[#643ADE] cursor-pointer"
+  }`}
+  onClick={onClick}
+>
+  {icon && <div className="[&>svg]:size-4">{icon}</div>}
+  <p>{name}</p>
+</div>
   );
 }
 
@@ -57,29 +60,30 @@ export function Sidebar() {
       />
 
       <Drawer.Content className="outline-none bg-transparent flex h-full w-[250px] fixed top-0 left-0 rounded-xl pl-3 pt-20 pb-5">
-        <div className="bg-gradient-to-tr from-[#000D33] via-white to-[#000D33] flex flex-col w-full rounded-xl">
-          <div className="h-full bg-[#0F132C] m-0.5 rounded-xl py-4 flex flex-col justify-between">
+        <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] flex flex-col w-full rounded-xl">
+          <div className="h-full bg-[#0F132C] m-px rounded-xl py-4 flex flex-col justify-between">
             <div className="flex flex-col space-y-1 m-2 ">
               {sidebarData.map((item, index) => (
                 <SidebarItem
                   key={index}
                   name={item.name}
                   icon={<item.icon />}
+                  disabled={item.name === "Serve" || item.name === "Settings" || item.name === "Actors" || item.name === "Matrics" || item.name === "Logs" || item.name === "Playground" || item.name === "Model AI"}
                 />
               ))}
             </div>
-            <div className="flex flex-col border rounded m-2 px-3 py-5">
+            <div className="flex flex-col rounded-lg m-2 px-3 py-5 bg-gradient-to-br from-[#04346B] to-[#78B6FF] text-white">
               <div className="flex flex-row justify-between mb-5">
                 <div className="col-span-3">
-                  <h1 className="text-sm font-semibold">Need Help ?</h1>
+                  <h1 className="text-sm">Need Help ?</h1>
                   <h3 className="text-xs font-light">Please check our docs</h3>
                 </div>
-                <div className="size-7 bg-white rounded flex justify-center items-center mt-1">
+                <div className="size-7 bg-white rounded-md flex justify-center items-center mt-1">
                   <div className="size-4 rounded-full bg-blue-600 text-xs text-center">?</div>
                 </div>
               </div>
               <div className="flex justify-center items-center">
-                <button className="border rounded p-2 w-full text-sm">DOCUMENTATION</button>
+                <button className="bg-[#000D33] rounded-lg p-2 w-full text-sm text-whote">DOCUMENTATION</button>
               </div>
             </div>
           </div>

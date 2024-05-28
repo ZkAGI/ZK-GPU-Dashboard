@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-[#000D33] font-ttfirs">
         <AppWalletProvider>
-          <Navbar />
+          <Navbar/>
           <SidebarRoot>
             <Sidebar />
           </SidebarRoot>

@@ -21,7 +21,7 @@ export const sidebarData: SidebarItem[] = [
     icon: FaBriefcase
   },
   {
-    name: 'Server',
+    name: 'Serve',
     icon: FaLayerGroup
   },
   {

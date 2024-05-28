@@ -10,7 +10,7 @@ const Navbar = () => {
     const {setIsOpen, isOpen} = useSideBarNavStore()
 
   return (
-    <div className="flex justify-between p-5 w-full bg-[#000D33]">
+    <div className="flex justify-between p-5 w-full">
       <Image src={"/icons/logo.svg"} width={100} height={100} alt="logo" />
       <div className="flex gap-10 items-center justify-center md:hidden md:pointer-events-none">
         <button onClick={() => setIsOpen(true)}>
