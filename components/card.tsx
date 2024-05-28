@@ -2,7 +2,7 @@ import { CardItem, cardData } from "@/data/cardData";
 import { Rocket } from '../components/icons/Rocket';
 import { Explore } from "./icons/Explore";
 import React from "react";
-import SvgDots from '../components/icons/Dots';
+import { Dots } from "./icons/Dots";
 import {Vector} from './icons/Vector'
 
 
@@ -14,7 +14,7 @@ const Card = () => {
           key={index}
           className="bg-gradient-to-br from-[#272A44] via-[#070121] to-[#272A44] rounded-lg relative"
         >
-          <SvgDots className="absolute inset-0 w-full h-full"/>
+          <Dots/>
           <div className="w-80 h-48 rounded-lg p-4 m-0.5 bg-gradient-to-b from-[#010921] to-[#12152B] text-white">
             <div className="pb-2">
               {card.title === "Getting started with ZkAGI" && (

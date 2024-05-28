@@ -1,7 +1,7 @@
 export const Dots = () =>{
     
     return (
-        <svg width="450" height="292" viewBox="0 0 450 292" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="450" height="292" viewBox="0 0 450 292" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="absolute inset-0 w-full h-full">
 <g style={{mixBlendMode:'color-dodge'}} opacity="0.8">
 <rect x="-5" y="-11" width="472" height="334" fill="url(#pattern0_234_1891)"/>
 </g>

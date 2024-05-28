@@ -1,6 +1,17 @@
 import { FaGamepad, FaRobot, FaCog, FaUserCircle, FaServer, FaBriefcase, FaLayerGroup, FaUserFriends, FaThLarge, FaClipboardList } from 'react-icons/fa';
 import { GoHomeFill } from 'react-icons/go';
 import { IconType } from 'react-icons';
+import { Vector1 } from '@/components/icons/Vector1';
+import { Vector2 } from '@/components/icons/Vector2';
+import { Vector3 } from '@/components/icons/Vector3';
+import { Vector4 } from '@/components/icons/Vector4';
+import { Vector5 } from '@/components/icons/Vector5';
+import { Vector6 } from '@/components/icons/Vector6';
+import { Vector7 } from '@/components/icons/Vector7';
+import { Vector8 } from '@/components/icons/Vector8';
+import { Vector10 } from '@/components/icons/Vector10';
+import { Vector11} from '@/components/icons/Vector11';
+import { Friends } from '@/components/icons/Friends';
 
 export interface SidebarItem {
   name: string;
@@ -10,46 +21,46 @@ export interface SidebarItem {
 export const sidebarData: SidebarItem[] = [
   {
     name: 'Dashboard',
-    icon: GoHomeFill
+    icon: Vector8
   },
   {
     name: 'Cluster',
-    icon: FaServer
+    icon: Vector1
   },
   {
     name: 'Jobs',
-    icon: FaBriefcase
+    icon: Vector2
   },
   {
     name: 'Serve',
-    icon: FaLayerGroup
+    icon: Vector3
   },
   {
     name: 'Actors',
-    icon: FaUserFriends
+    icon: Vector10
   },
   {
     name: 'Matrics',
-    icon: FaThLarge
+    icon: Vector4
   },
   {
     name: 'Logs',
-    icon: FaClipboardList
+    icon: Vector5
   },
   {
     name: 'Playground',
-    icon: FaGamepad
+    icon: Vector11
   },
   {
     name: 'Model AI',
-    icon: FaRobot
+    icon: Vector6
   },
   {
     name: 'Settings',
-    icon: FaCog
+    icon: Vector7
   },
   {
     name: 'Profile',
-    icon: FaUserCircle
+    icon: Friends
   }
 ];
