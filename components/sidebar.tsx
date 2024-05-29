@@ -5,6 +5,8 @@ import { GoHomeFill } from "react-icons/go";
 import { useSideBarNavStore } from "../hooks/store/useSideBarStore";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { sidebarData } from "@/data/sidebarData";
+import { BackgroundNeedHelp } from "./icons/BackgroundNeedHelp";
+import Tooltips from "./Tooltip";
 
 export function SidebarRoot({ children }: { children: React.ReactNode }) {
   const { getIsOpen } = useSideBarNavStore();
@@ -37,17 +39,36 @@ export function SidebarItem(props: SidebarItemProps) {
     }
   };
 
-  return (
-    <div
-  className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${
-    disabled ? "text-gray-500 cursor-default" : "text-white hover:bg-[#643ADE] cursor-pointer"
-  }`}
-  onClick={onClick}
->
-  {icon && <div className="[&>svg]:size-4">{icon}</div>}
-  <p>{name}</p>
-</div>
-  );
+//   return (
+//     <div
+//   className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${
+//     disabled ? "text-gray-500 cursor-default" : "text-white hover:bg-[#643ADE] cursor-pointer"
+//   }`}
+//   onClick={onClick}
+// >
+//   {icon && <div className="[&>svg]:size-4">{icon}</div>}
+//   <p>{name}</p>
+// </div>
+//   );
+const content = (
+  <div
+    className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${
+      disabled ? 'text-gray-500 cursor-default' : 'text-white hover:bg-[#643ADE] cursor-pointer'
+    }`}
+    onClick={onClick}
+  >
+    {icon && <div className={`[&>svg]:size-4 ${disabled ? 'text-gray-500' : ''}`}>{icon}</div>}
+    <p>{name}</p>
+  </div>
+);
+
+return disabled ? (
+  <Tooltips message="Coming Soon">
+    {content}
+  </Tooltips>
+) : (
+  content
+);
 }
 
 export function Sidebar() {
@@ -72,8 +93,9 @@ export function Sidebar() {
                 />
               ))}
             </div>
-            <div className="flex flex-col rounded-lg m-2 px-3 py-5 bg-gradient-to-br from-[#04346B] to-[#78B6FF] text-white">
-              <div className="flex flex-row justify-between mb-5">
+            <div className="flex flex-col rounded-lg m-2 px-3 py-5 relative">
+            <BackgroundNeedHelp />
+              <div className="flex flex-row justify-between mb-5 z-50 text-white mt-2">
                 <div className="col-span-3">
                   <h1 className="text-sm">Need Help ?</h1>
                   <h3 className="text-xs font-light">Please check our docs</h3>
@@ -82,8 +104,8 @@ export function Sidebar() {
                   <div className="size-4 rounded-full bg-blue-600 text-xs text-center">?</div>
                 </div>
               </div>
-              <div className="flex justify-center items-center">
-                <button className="bg-[#000D33] rounded-lg p-2 w-full text-sm text-whote">DOCUMENTATION</button>
+              <div className="flex justify-center items-center z-50">
+                <button className="bg-[#000D33] rounded-lg p-2 w-full text-sm text-white">DOCUMENTATION</button>
               </div>
             </div>
           </div>
