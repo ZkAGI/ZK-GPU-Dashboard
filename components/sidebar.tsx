@@ -38,18 +38,7 @@ export function SidebarItem(props: SidebarItemProps) {
       setIsOpen(false);
     }
   };
-
-//   return (
-//     <div
-//   className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${
-//     disabled ? "text-gray-500 cursor-default" : "text-white hover:bg-[#643ADE] cursor-pointer"
-//   }`}
-//   onClick={onClick}
-// >
-//   {icon && <div className="[&>svg]:size-4">{icon}</div>}
-//   <p>{name}</p>
-// </div>
-//   );
+  
 const content = (
   <div
     className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${

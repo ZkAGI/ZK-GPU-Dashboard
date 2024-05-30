@@ -1,5 +1,3 @@
-import { FaGamepad, FaRobot, FaCog, FaUserCircle, FaServer, FaBriefcase, FaLayerGroup, FaUserFriends, FaThLarge, FaClipboardList } from 'react-icons/fa';
-import { GoHomeFill } from 'react-icons/go';
 import { IconType } from 'react-icons';
 import { Vector1 } from '@/components/icons/Vector1';
 import { Vector2 } from '@/components/icons/Vector2';
