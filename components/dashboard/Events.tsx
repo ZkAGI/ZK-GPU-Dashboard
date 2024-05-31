@@ -75,14 +75,17 @@ const Events: React.FC = () => {
 //   fetchMembers()
 
 useEffect(() => {
-    fetch('http://109.205.183.41:8265/api/jobs/')
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('Fetched data:', data); // Log the fetched data
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const targetUrl = 'http://109.205.183.41:8265/api/jobs/';
+
+  fetch(proxyUrl + targetUrl)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log('Fetched data:', data); // Log the fetched data
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
   }, []);
 
   return (
