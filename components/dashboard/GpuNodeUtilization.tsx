@@ -21,7 +21,7 @@ const GPUNodesUtilization: React.FC = () => {
       <div>GPU Nodes Utilization</div>
       <div className="bg-[#060b28] p-2 rounded-md flex flex-col">
         <UtilizationInfo/>
-        <div style={{ height: '250px', width: '50' }}> 
+        <div style={{ height: '250px', width: '60' }}> 
           <LineChart data={sampleData} />
         </div>
       </div>

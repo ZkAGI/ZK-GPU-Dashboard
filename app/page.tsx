@@ -1,18 +1,6 @@
 "use client";
 
-import { CustomWalletButtons } from "@/components/CustomWalletButton";
-import Card from "../components/card";
-import { Illustration } from "../components/icons/Illustration";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-// import Chart from "@/components/graphs/Chart";
-// import { RadialBarChart } from "@/components/graphs/RadialBarChart";
-import { CustomGauge } from "@/components/graphs/Chart";
-import RadialBarChart from "@/components/graphs/RadialBarChart";
-import NetworkCapacityChart from "@/components/graphs/NetworkCapacityChart";
-import TotalEarningChart from "@/components/graphs/TotalEarningChart";
-import BarChart from "@/components/graphs/BarGraph";
-import { BarData } from "@/components/graphs/types";
-import LineChart, { LineData, LineDatum } from "@/components/graphs/LineChart";
 import CapacityOverview from "@/components/dashboard/CapacityOverview";
 import GpuContribution from "@/components/dashboard/GpuContribution";
 import NetworkCapacity from "@/components/dashboard/NetworkCapacity";
@@ -21,6 +9,7 @@ import WelcomeSection from "@/components/Welcome";
 import GPUNodesUtilization from "@/components/dashboard/GpuNodeUtilization";
 import GPUCapacity from "@/components/dashboard/GPUCapacity";
 import Utilization from "@/components/dashboard/Utilization";
+import Events from "@/components/dashboard/Events";
 
 export default function Home() {
   const { connection } = useConnection();
@@ -30,7 +19,7 @@ export default function Home() {
     <div className="flex flex-col h-screen overflow-x-hidden relative mr-4">
       <main className="flex-grow">
         {publicKey ? (
-          <div className="grid grid-rows-2 w-full mb-2">
+          <div className="grid grid-rows-3 w-full mb-2">
             <div className=" grid grid-cols-5 gap-2 p-2">
               <div className="text-white p-1">
                 <CapacityOverview />
@@ -55,9 +44,14 @@ export default function Home() {
                 </div>
               </div>
               <div className="col-span-2">
-              <div className="col-span-3 text-white rounded-lg p-1">
+                <div className="col-span-3 text-white rounded-lg p-1">
                   <Utilization />
                 </div>
+              </div>
+            </div>
+            <div>
+              <div className="col-span-3 text-white rounded-lg p-1">
+                <Events />
               </div>
             </div>
           </div>

@@ -30,7 +30,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
   return (
     <ResponsiveLine
       data={data}
-      margin={{ top: 30, right: 100, bottom: 50, left: 60 }}
+      margin={{ top: 30, right: 60, bottom: 50, left: 60 }}
       colors="#0075FF"
       xScale={{ type: 'point' }}
       yScale={{

@@ -7,6 +7,7 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { sidebarData } from "@/data/sidebarData";
 import { BackgroundNeedHelp } from "./icons/BackgroundNeedHelp";
 import Tooltips from "./Tooltip";
+import Link from "next/link";
 
 export function SidebarRoot({ children }: { children: React.ReactNode }) {
   const { getIsOpen } = useSideBarNavStore();
@@ -26,10 +27,11 @@ interface SidebarItemProps {
   name: string;
   icon?: React.ReactNode;
   disabled?: boolean;
+  href?: string;
 }
 
 export function SidebarItem(props: SidebarItemProps) {
-  const { name, icon, disabled = false } = props;
+  const { name, icon, disabled = false, href } = props;
   const { setIsOpen } = useSideBarNavStore();
   const size = useWindowSize();
 
@@ -40,6 +42,7 @@ export function SidebarItem(props: SidebarItemProps) {
   };
   
 const content = (
+  <Link href={href || '#'} passHref>
   <div
     className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${
       disabled ? 'text-gray-500 cursor-default' : 'text-white hover:bg-[#643ADE] cursor-pointer'
@@ -49,6 +52,7 @@ const content = (
     {icon && <div className={`[&>svg]:size-4 ${disabled ? 'text-gray-500' : ''}`}>{icon}</div>}
     <p>{name}</p>
   </div>
+  </Link>
 );
 
 return disabled ? (
@@ -79,6 +83,7 @@ export function Sidebar() {
                   name={item.name}
                   icon={<item.icon />}
                   disabled={item.name === "Serve" || item.name === "Settings" || item.name === "Actors" || item.name === "Matrics" || item.name === "Logs" || item.name === "Playground" || item.name === "Model AI"}
+                  href={item.name === "Dashboard" ? "/" : item.path}
                 />
               ))}
             </div>

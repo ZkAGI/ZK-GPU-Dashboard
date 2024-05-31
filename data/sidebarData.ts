@@ -14,51 +14,63 @@ import { Friends } from '@/components/icons/Friends';
 export interface SidebarItem {
   name: string;
   icon: IconType;
+  path: string;
 }
 
 export const sidebarData: SidebarItem[] = [
   {
     name: 'Dashboard',
-    icon: Vector8
+    icon: Vector8,
+    path: '/'
   },
   {
     name: 'Cluster',
-    icon: Vector1
+    icon: Vector1,
+    path: '/cluster'
   },
   {
     name: 'Jobs',
-    icon: Vector2
+    icon: Vector2,
+    path: '/jobs'
   },
   {
     name: 'Serve',
-    icon: Vector3
+    icon: Vector3,
+    path: '/serve'
   },
   {
     name: 'Actors',
-    icon: Vector10
+    icon: Vector10,
+    path: '/actors'
   },
   {
     name: 'Matrics',
-    icon: Vector4
+    icon: Vector4,
+    path: '/matrics'
   },
   {
     name: 'Logs',
-    icon: Vector5
+    icon: Vector5,
+    path: '/logs'
   },
   {
     name: 'Playground',
-    icon: Vector11
+    icon: Vector11,
+    path: '/playground'
   },
   {
     name: 'Model AI',
-    icon: Vector6
+    icon: Vector6,
+    path: '/modelai'
   },
   {
     name: 'Settings',
-    icon: Vector7
+    icon: Vector7,
+    path: '/settings'
   },
   {
     name: 'Profile',
-    icon: Friends
+    icon: Friends,
+    path: '/profile'
   }
 ];
