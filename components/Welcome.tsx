@@ -21,13 +21,13 @@ const WelcomeSection: React.FC = () => {
       <div>
         <Card />
       </div>
-      <div className="relative mt-5 rounded-md">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#A4C8FF] via-[#A992ED] to-[#643ADE] blur-lg rounded-md"></div>
-        <div className="relative p-0.5">
+      <div className="relative mt-9 rounded-md">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#A4C8FF] via-[#A992ED] to-[#643ADE] blur-md rounded-md"></div>
+        <div className="p-px">
           <CustomWalletButtons />
         </div>
       </div>
-      <div>
+      <div className="">
         <Illustration />
       </div>
     </div>
@@ -35,3 +35,4 @@ const WelcomeSection: React.FC = () => {
 }
 
 export default WelcomeSection;
+
