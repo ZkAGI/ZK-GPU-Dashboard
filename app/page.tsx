@@ -10,17 +10,17 @@ import GPUNodesUtilization from "@/components/dashboard/GpuNodeUtilization";
 import GPUCapacity from "@/components/dashboard/GPUCapacity";
 import Utilization from "@/components/dashboard/Utilization";
 import Events from "@/components/dashboard/Events";
-import { Illustration } from '../components/icons/Illustration'
+import { Illustration } from "../components/icons/Illustration";
 
 export default function Home() {
   const { connection } = useConnection();
-  const { publicKey } = useWallet();
+  const { publicKey} = useWallet();
 
   return (
     <div className="flex flex-col h-full overflow-x-hidden relative mr-4">
       <main className="">
         {publicKey ? (
-          <div className="grid grid-rows-3 w-full mb-2">
+          <div className="flex flex-col w-full mb-2">
             <div className=" grid grid-cols-5 gap-2 p-2">
               <div className="text-white p-1">
                 <CapacityOverview />
@@ -49,10 +49,10 @@ export default function Home() {
                   <Utilization />
                 </div>
               </div>
-              <div className="col-span-3">
+            </div>
+            <div className=" p-2">
               <div className="col-span-3 text-white rounded-lg p-1">
-                  <Events />
-                </div>
+                <Events />
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@ export default function Home() {
           <WelcomeSection />
         )}
       </main>
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-8">
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-8 pointer-events-none">
         <div className="w-2/6 h-60 bg-[#643ADE] rounded-t-full blur-[100px] drop-shadow-lg relative -z-10" />
       </div>
       <div className="flex flex-col justify-center items-center">
