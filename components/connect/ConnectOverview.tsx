@@ -9,18 +9,13 @@ import { ButtonV2 } from "../buttonV2";
 import React from "react";
 
 const forms = {
-  darwin: [
-    (onNext: () => any) => <SecondForm title="macOS" onNext={onNext} />,
-    (onNext: () => any) => <SecondForm title="Catalina" onNext={onNext} />,
-    (onNext: () => any) => <ThirdForm onNext={onNext} />,
-  ],
   win32: [
     (onNext: () => any) => <SecondForm title="Windows" onNext={onNext} />,
     (onNext: () => any) => <ThirdForm onNext={onNext} />,
   ],
+  darwin: [(onNext: () => any) => <ThirdForm onNext={onNext} />],
   linux: [
     (onNext: () => any) => <SecondForm title="Ubuntu" onNext={onNext} />,
-    (onNext: () => any) => <SecondForm title="Bionic Beaver" onNext={onNext} />,
     (onNext: () => any) => <ThirdForm onNext={onNext} />,
   ],
 };
@@ -28,19 +23,19 @@ const forms = {
 type OS = keyof typeof forms;
 
 const descriptions = {
-  darwin: ["Operating System", "Device Type", "Script File"],
-  win32: ["Operating System", "Script File"],
+  darwin: ["Operating System", "Script File"],
+  win32: ["Operating System", "Device Type", "Script File"],
   linux: ["Operating System", "Device Type", "Script File"],
 };
 
 function RenderSequentially({
   forms,
   os,
-  showForms
+  showForms,
 }: {
   forms: ((onNext: () => any) => JSX.Element)[];
   os: OS;
-  showForms: boolean
+  showForms: boolean;
 }) {
   const [index, setIndex] = useState(0);
 
@@ -48,7 +43,7 @@ function RenderSequentially({
   const onPrev = () => setIndex((existing) => existing - 1);
   const description = descriptions[os];
 
-  console.log(index, forms[index])
+  console.log(index, forms[index]);
 
   return (
     // <>
@@ -60,14 +55,28 @@ function RenderSequentially({
       <div className="flex items-center justify-center space-x-4 mb-6 mx-60">
         {description.map((step, i) => (
           <React.Fragment key={i}>
-            <div className={`flex flex-col items-center ${i <= index ? 'text-[#01B574]' : 'text-[#5A49AC] font-light'}`}>
-              <div className={`w-5 h-5 rounded-full flex items-center justify-center text-white text-sm font-bold ${i <= index ? 'bg-[#01B574]' : 'bg-[#5A49AC] text-[#010921] font-light'}`}>
+            <div
+              className={`flex flex-col items-center ${
+                i <= index ? "text-[#01B574]" : "text-[#5A49AC] font-light"
+              }`}
+            >
+              <div
+                className={`w-5 h-5 rounded-full flex items-center justify-center text-white text-sm font-bold ${
+                  i <= index
+                    ? "bg-[#01B574]"
+                    : "bg-[#5A49AC] text-[#010921] font-light"
+                }`}
+              >
                 {i + 1}
               </div>
               <span className="text-xs mt-1 text-center">{step}</span>
             </div>
             {i < description.length - 1 && (
-              <div className={`flex-grow h-0.5 ${i < index ? 'bg-[#01B574]' : 'bg-[#5A49AC]'}`}></div>
+              <div
+                className={`flex-grow h-0.5 ${
+                  i < index ? "bg-[#01B574]" : "bg-[#5A49AC]"
+                }`}
+              ></div>
             )}
           </React.Fragment>
         ))}
@@ -78,42 +87,43 @@ function RenderSequentially({
 }
 
 export function ConnectOverview() {
-  const [os, setOs] = useState<OS>("darwin");
+  const [os, setOs] = useState<OS>("win32");
   const [showForms, setShowForms] = useState(false);
-
 
   return (
     <>
-      <RenderSequentially forms={forms[os]} os={os} showForms={showForms}/>
+      <RenderSequentially forms={forms[os]} os={os} showForms={showForms} />
       {!showForms && (
         <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 rounded-md w-1/4">
           <div className="bg-[#060B28] p-4 rounded-md">
-          <div>
-                  <Radio
-                    name="os"
-                    value="darwin"
-                    text="macOS"
-                    onChange={(value) => setOs(value as any)}
-                    checked={os == "darwin"}
-                  />
-                  <Radio
-                    name="os"
-                    value="win32"
-                    text="Windows"
-                    onChange={(value) => setOs(value as any)}
-                    checked={os == "win32"}
-                  />
-                  <Radio
-                    name="os"
-                    value="linux"
-                    text="Ubuntu"
-                    onChange={(value) => setOs(value as any)}
-                    checked={os == "linux"}
-                  />
-                </div>
+            <div>
+              <Radio
+                name="os"
+                value="win32"
+                text="Windows"
+                onChange={(value) => setOs(value as any)}
+                checked={os == "win32"}
+              />
+              <Radio
+                name="os"
+                value="darwin"
+                text="macOS"
+                onChange={(value) => setOs(value as any)}
+                checked={os == "darwin"}
+              />
+              <Radio
+                name="os"
+                value="linux"
+                text="Ubuntu"
+                onChange={(value) => setOs(value as any)}
+                checked={os == "linux"}
+              />
+            </div>
             <div className="flex justify-end">
               <ButtonV2>
-                <button type="button" onClick={() => setShowForms(true)}>NEXT STEP</button>
+                <button type="button" onClick={() => setShowForms(true)}>
+                  NEXT STEP
+                </button>
               </ButtonV2>
             </div>
           </div>

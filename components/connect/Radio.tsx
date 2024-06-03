@@ -2,6 +2,7 @@ import { useId } from "react";
 import { Mac } from "../icons/mac";
 import {Windows} from "../icons/windows";
 import { Linux } from "../icons/linux";
+import { Chip } from "../icons/Chip";
 
 interface RadioProps {
   value: string;
@@ -21,7 +22,7 @@ export function Radio(props: RadioProps) {
         <div className="grid grid-cols-3 p-2 rounded m-px bg-[#171D3D]">
             <div className="flex flex-row justify-start items-center gap-4 col-span-2">
                 <div>
-                    {text == 'macOS' && <Mac/> || text=='Windows' && <Windows/> || text=='Ubuntu' && <Linux/>}
+                    {text == 'macOS' && <Mac/> || text=='Windows' && <Windows/> || text=='Ubuntu' && <Linux/> || text=="GPU" && <Chip/> || text=="CPU" && <Chip/>}
                 </div>
                           <div className="">
                 <label htmlFor={id}>{text}</label>
