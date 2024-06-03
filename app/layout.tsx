@@ -4,6 +4,8 @@ import Navbar from "../components/navbar";
 import { Sidebar, SidebarRoot } from "../components/sidebar";
 import AppWalletProvider from "../components/AppWalletProvider";
 import { SWRConfig } from "@/components/SWRConfig";
+import { Toaster } from "sonner";
+import { AppProps } from "next/app";
 
 export const metadata: Metadata = {
   title: "ZkAGI Console",
@@ -28,6 +30,7 @@ export default function RootLayout({
             <div className="md:pl-[280px]">{children}</div>
           </AppWalletProvider>
         </SWRConfig>
+        <Toaster />
       </body>
     </html>
   );

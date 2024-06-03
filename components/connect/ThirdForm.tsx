@@ -6,24 +6,32 @@ import axios from "axios";
 import { Copy } from "../icons/Copy";
 import { OpenLink } from '../icons/OpenLink';
 import { OpenLink2 } from '../icons/OpenLink2';
+import useSWR from "swr";
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
+  const { data, error } = useSWR('http://109.205.183.41:3000/api/nodes', { refreshInterval: 8000 });
+
   const { publicKey, wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
   const handleSubmit = async () => {
-    console.log('h')
     try {
-      const response: any = await axios({
-        method: "POST",
-        url: "http://104.131.170.196:3000/wallets/${walletAddress}/ip_addresses",
+      const response: any = await axios({ 
+        method: "GET",
+        url: `http://104.131.170.196:3000/wallets/${walletAddress}/ip_addresses`,
         data: {},
         headers: {
           "Content-Type": "application/json",
         },
       });
       if (response.status === 200) {
-        toast.success("Successfully connected!");
+       const current_ip = response.data.ip_addresses[0]
+       {data && data?.data?.summary.map((node: any) => {
+        console.log(node.ip)
+        if(node?.ip === '10.8.0.22'){
+          toast.success("Successfully connected!");
+        }
+       })}
     }else{
         toast.error("Not connected!");
     }

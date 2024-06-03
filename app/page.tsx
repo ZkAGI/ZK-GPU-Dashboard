@@ -11,10 +11,27 @@ import GPUCapacity from "@/components/dashboard/GPUCapacity";
 import Utilization from "@/components/dashboard/Utilization";
 import Events from "@/components/dashboard/Events";
 import { Illustration } from "../components/icons/Illustration";
+import { useEffect, useState } from "react";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+
 
 export default function Home() {
   const { connection } = useConnection();
-  const { publicKey} = useWallet();
+  const { publicKey, } = useWallet();
+
+  const [balance, setBalance] = useState<number>(0);
+ 
+useEffect(() => {
+  if (publicKey) {
+    (async function getBalanceEvery10Seconds() {
+      const newBalance = await connection.getBalance(publicKey);
+      setBalance(newBalance / LAMPORTS_PER_SOL);
+      setTimeout(getBalanceEvery10Seconds, 10000);
+    })();
+  }
+}, [publicKey, connection, balance]);
+
+console.log(balance)
 
   return (
     <div className="flex flex-col h-full overflow-x-hidden relative mr-4">
