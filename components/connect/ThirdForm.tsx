@@ -1,22 +1,24 @@
 import { Field, Form } from "houseform";
 import { ButtonV2 } from "../buttonV2";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { toast } from 'sonner'
+import { toast } from "sonner";
 import axios from "axios";
 import { Copy } from "../icons/Copy";
-import { OpenLink } from '../icons/OpenLink';
-import { OpenLink2 } from '../icons/OpenLink2';
+import { OpenLink } from "../icons/OpenLink";
+import { OpenLink2 } from "../icons/OpenLink2";
 import useSWR from "swr";
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
-  const { data, error } = useSWR('http://65.20.68.31:5000/api/nodes', { refreshInterval: 8000 });
+  const { data, error } = useSWR("http://65.20.68.31:5000/api/nodes", {
+    refreshInterval: 8000,
+  });
 
   const { publicKey, wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
   const handleSubmit = async () => {
     try {
-      const response: any = await axios({ 
+      const response: any = await axios({
         method: "GET",
         url: `http://104.131.170.196:3000/wallets/${walletAddress}/ip_addresses`,
         data: {},
@@ -25,36 +27,56 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         },
       });
       if (response.status === 200) {
-       const current_ip = response.data.ip_addresses[0]
-       {data && data?.data?.summary.map(async (node: any) => {
-        console.log(node.ip)
-        if(node?.ip === current_ip){
-          try {
-            const postResponse = await axios({
-              method: "POST",
-              url: "http://104.131.170.196:8080/ips", 
-              data: {
-                
-                walletAddress: walletAddress,
-                nodeIP: [node.ip],
-              },
-              headers: {
-                "Content-Type": "application/json",
-                
-              },
+        const current_ip = response.data.ip_addresses[0];
+        {
+          data &&
+            data?.data?.summary.map(async (node: any) => {
+              if (node?.ip === "172.17.0.2") {
+                try {
+                  const postResponse = await axios({
+                    method: "POST",
+                    url: "http://104.131.170.196:3000/ips",
+                    data: {
+                      walletAddress: walletAddress,
+                      nodeIP: [node.ip],
+                    },
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  });
+                  if (postResponse.status === 200) {
+                    try {
+                      const postResponse2 = await axios({
+                        method: "POST",
+                        url: "http://104.131.170.196:3000/nodes",
+                        data: {
+                          node_id: node.ip,
+                          start_time: "2024-05-29T13:53:16Z",
+                          gpu: "NVIDIA GTX 1080",
+                          gram: "8GB",
+                          memory: "16GB",
+                          storage: "500GB SSD",
+                        },
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      });
+                      if (postResponse2.status === 200) {
+                        toast.success("Successfully connected!");
+                      }
+                    } catch (error) {
+                      console.error("Error making POST request:", error);
+                    }
+                  }
+                } catch (error) {
+                  console.error("Error making POST request:", error);
+                }
+              }
             });
-            if (postResponse.status === 200) {
-              toast.success("Successfully connected!");
-              console.log("POST request successful");
-            } 
-          } catch (error) {
-            console.error("Error making POST request:", error);
-          }
         }
-       })}
-    }else{
+      } else {
         toast.error("Not connected!");
-    }
+      }
     } catch {
       console.log("error");
     }
@@ -70,7 +92,9 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         >
           <div>
             <div className="text-lg">3. Script File</div>
-            <div className="text-xs text-[#5D7285] ml-4">Download Script File to Install Drivers</div>
+            <div className="text-xs text-[#5D7285] ml-4">
+              Download Script File to Install Drivers
+            </div>
           </div>
           <Field name="firstName">
             {({ value, setValue }) => (
@@ -87,7 +111,9 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       <div className="text-xs">
                         https://www.docker.com/products/docker-desktop/
                       </div>
-                      <div className=" p-1 "><OpenLink/></div>
+                      <div className=" p-1 ">
+                        <OpenLink />
+                      </div>
                     </div>
                   </div>
                   <div className="border-2 border-[#2d3150] rounded-lg px-4 py-2 m-2">
@@ -97,16 +123,22 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                         <div className="text-xs">
                           docker pull Zkagi/ConnectCluster
                         </div>
-                        <div className="p-1"><Copy/></div>
+                        <div className="p-1">
+                          <Copy />
+                        </div>
                       </div>
                     </div>
                     <div className="mx-10 my-4">
                       <div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
-                        <div><OpenLink2/></div>
+                        <div>
+                          <OpenLink2 />
+                        </div>
                         <div>CUDA Toolkit download and setup</div>
                       </div>
                       <div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
-                      <div><OpenLink2/></div>
+                        <div>
+                          <OpenLink2 />
+                        </div>
                         <div>Nvidia Drivers Installation</div>
                       </div>
                     </div>
@@ -116,7 +148,9 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                         <div className="w-3/4 text-xs">
                           {`docker run -dit -e "wallet=${walletAddress}" --privileged --network host Zkagi/ConnectCluster`}
                         </div>
-                        <div className=" p-1"><Copy/></div>
+                        <div className=" p-1">
+                          <Copy />
+                        </div>
                       </div>
                     </div>
                   </div>
