@@ -20,7 +20,10 @@ export function SecondForm({
             }}
             className="flex flex-col"
           >
-            <h1>{title}</h1>
+            <div>
+            <div className="text-lg">2. Device Type</div>
+            <div className="text-xs text-[#5D7285] ml-4">If you opt for the GPU Worker but your device lacks a GPU,<br/> the setup will not succeed.</div>
+          </div>
             <div className="grid grid-cols-2 gap-20">
               <div>
                 <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 mx-2 rounded-md w-1/2">

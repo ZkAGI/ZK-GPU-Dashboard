@@ -36,3 +36,22 @@
     text-wrap: balance;
   }
 }
+
+/* .wallet-adapter-button{
+  font-family: "TT Firs Neue";
+  border: #ffffff
+}
+
+.wallet-adapter-button-trigger {
+  background-color: #010921;
+  font-family: "TT Firs Neue";
+  border: #ffffff;
+  font-weight: normal;
+  text-transform: uppercase
+} */
+
+@layer utilities {
+  .clip-triangle {
+    clip-path: polygon(50% 100%, 0 0, 100% 0);
+  }
+}

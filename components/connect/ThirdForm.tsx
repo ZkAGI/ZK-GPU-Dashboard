@@ -48,7 +48,10 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
             isValid && submit();
           }}
         >
-          <h1>third form</h1>
+          <div>
+            <div className="text-lg">3. Script File</div>
+            <div className="text-xs text-[#5D7285] ml-4">Download Script File to Install Drivers</div>
+          </div>
           <Field name="firstName">
             {({ value, setValue }) => (
               <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 mx-2 rounded-md w-1/2">

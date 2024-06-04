@@ -19,19 +19,20 @@ export default function Home() {
   const { connection } = useConnection();
   const { publicKey, } = useWallet();
 
-  const [balance, setBalance] = useState<number>(0);
+//   const [balance, setBalance] = useState<number>(0);
  
-useEffect(() => {
-  if (publicKey) {
-    (async function getBalanceEvery10Seconds() {
-      const newBalance = await connection.getBalance(publicKey);
-      setBalance(newBalance / LAMPORTS_PER_SOL);
-      setTimeout(getBalanceEvery10Seconds, 10000);
-    })();
-  }
-}, [publicKey, connection, balance]);
+// useEffect(() => {
+//   if (publicKey) {
+//     (async function getBalanceEvery10Seconds() {
+//       const newBalance = await connection.getBalance(publicKey);
+//       console.log('Connection:', newBalance);
+//       setBalance(newBalance / LAMPORTS_PER_SOL);
+//       setTimeout(getBalanceEvery10Seconds, 10000);
+//     })();
+//   }
+// }, [publicKey, connection, balance]);
 
-console.log(balance)
+// console.log('balance',balance)
 
   return (
     <div className="flex flex-col h-full overflow-x-hidden relative mr-4">
@@ -45,11 +46,11 @@ console.log(balance)
               <div className="text-white rounded-lg p-1">
                 <GpuContribution />
               </div>
-              <div className="text-white rounded-lg p-1">
-                <NetworkCapacity />
-              </div>
               <div className=" col-span-2 text-white p-1">
                 <ReferralTracking />
+              </div>
+              <div className="text-white rounded-lg p-1">
+                <NetworkCapacity />
               </div>
             </div>
             <div className="grid grid-cols-8 gap-2 w-full">

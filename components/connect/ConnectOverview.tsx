@@ -7,6 +7,7 @@ import { Radio } from "./Radio";
 import { useEffect, useState } from "react";
 import { ButtonV2 } from "../buttonV2";
 import React from "react";
+import { PiLessThanLight } from "react-icons/pi";
 
 const forms = {
   win32: [
@@ -32,15 +33,26 @@ function RenderSequentially({
   forms,
   os,
   showForms,
+  index,
+  setIndex,
+  setShowForms
 }: {
   forms: ((onNext: () => any) => JSX.Element)[];
   os: OS;
   showForms: boolean;
+  index:number;
+  setIndex:React.Dispatch<React.SetStateAction<number>>,
+  setShowForms: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const [index, setIndex] = useState(0);
+  // const [index, setIndex] = useState(0);
 
   const onNext = () => setIndex((existing) => existing + 1);
-  const onPrev = () => setIndex((existing) => existing - 1);
+  const onPrev = () => {
+    setIndex((existing) => existing - 1)
+    if(index == 1){
+      setShowForms(false)
+    }
+  };
   const description = descriptions[os];
 
   console.log(index, forms[index]);
@@ -81,7 +93,8 @@ function RenderSequentially({
           </React.Fragment>
         ))}
       </div>
-      {showForms && forms[index] && forms[index](onNext)}
+      {showForms && <button type="button" onClick={onPrev} className="text-[#5D7285] text-xs flex justify-center items-center gap-1 ml-4"> <span className="text-white"><PiLessThanLight /></span> Back one step</button>}
+      {showForms && forms[index-1] && forms[index-1](onNext)}
     </div>
   );
 }
@@ -89,12 +102,23 @@ function RenderSequentially({
 export function ConnectOverview() {
   const [os, setOs] = useState<OS>("win32");
   const [showForms, setShowForms] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  const onNext = () => {
+    setShowForms(true)
+    setIndex(exi => exi+1)
+  }
 
   return (
     <>
-      <RenderSequentially forms={forms[os]} os={os} showForms={showForms} />
+      <RenderSequentially forms={forms[os]} os={os} showForms={showForms} index={index} setIndex={setIndex} setShowForms={setShowForms}/>
       {!showForms && (
-        <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 rounded-md w-1/4">
+        <div className="mb-20">
+          <div>
+            <div className="text-lg">1. Operating System</div>
+            <div className="text-xs text-[#5D7285] ml-4">Choose Operating System "OS"</div>
+          </div>
+          <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 rounded-md w-1/4">
           <div className="bg-[#060B28] p-4 rounded-md">
             <div>
               <Radio
@@ -121,12 +145,13 @@ export function ConnectOverview() {
             </div>
             <div className="flex justify-end">
               <ButtonV2>
-                <button type="button" onClick={() => setShowForms(true)}>
+                <button type="button" onClick={onNext}>
                   NEXT STEP
                 </button>
               </ButtonV2>
             </div>
           </div>
+        </div>
         </div>
       )}
     </>

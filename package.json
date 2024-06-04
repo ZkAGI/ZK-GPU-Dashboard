@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bonfida/spl-name-service": "^2.5.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@nivo/bar": "^0.87.0",
@@ -16,11 +17,12 @@
     "@nivo/line": "^0.87.0",
     "@nivo/pie": "^0.87.0",
     "@nivo/radial-bar": "^0.87.0",
+    "@solana/spl-name-service": "^0.2.1",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/wallet-adapter-wallets": "^0.19.32",
-    "@solana/web3.js": "^1.91.8",
+    "@solana/web3.js": "^1.92.0",
     "@tanstack/react-table": "^8.17.3",
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.2",
