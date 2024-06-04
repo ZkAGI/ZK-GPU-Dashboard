@@ -9,7 +9,7 @@ import { OpenLink2 } from '../icons/OpenLink2';
 import useSWR from "swr";
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
-  const { data, error } = useSWR('http://109.205.183.41:3000/api/nodes', { refreshInterval: 8000 });
+  const { data, error } = useSWR('http://65.20.68.31:5000/api/nodes', { refreshInterval: 8000 });
 
   const { publicKey, wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
@@ -26,10 +26,30 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
       });
       if (response.status === 200) {
        const current_ip = response.data.ip_addresses[0]
-       {data && data?.data?.summary.map((node: any) => {
+       {data && data?.data?.summary.map(async (node: any) => {
         console.log(node.ip)
-        if(node?.ip === '10.8.0.22'){
-          toast.success("Successfully connected!");
+        if(node?.ip === current_ip){
+          try {
+            const postResponse = await axios({
+              method: "POST",
+              url: "http://104.131.170.196:8080/ips", 
+              data: {
+                
+                walletAddress: walletAddress,
+                nodeIP: [node.ip],
+              },
+              headers: {
+                "Content-Type": "application/json",
+                
+              },
+            });
+            if (postResponse.status === 200) {
+              toast.success("Successfully connected!");
+              console.log("POST request successful");
+            } 
+          } catch (error) {
+            console.error("Error making POST request:", error);
+          }
         }
        })}
     }else{

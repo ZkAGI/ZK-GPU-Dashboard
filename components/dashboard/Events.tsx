@@ -18,7 +18,7 @@ interface EventsData {
 }
 
 const Events: React.FC = () => {
-  const { data } = useSWR("http://109.205.183.41:3000/events", {
+  const { data } = useSWR("http://65.20.68.31:5000/events", {
     refreshInterval: 1000,
   });
   const { events, setEvents } = useEventsStore();
@@ -36,7 +36,7 @@ const Events: React.FC = () => {
         accessorKey: "severity",
         cell: ({ getValue }) => {
           const severity = getValue() as EventsData["severity"];
-          const bgColor = severity === "ERROR" ? "bg-[#FFFFFF] text-center w-1/2" : "bg-[#FFFFFF] text-center w-1/2";
+          const bgColor = severity === "ERROR" ? "bg-[#FFFFFF] text-center w-3/4" : "bg-[#FFFFFF] text-center w-1/2";
           const textColor = severity === "ERROR" ? "text-[#FF3636]" : "text-[#01B574]";
           return (
             <div className={`p-1 rounded ${bgColor} text-white`}>

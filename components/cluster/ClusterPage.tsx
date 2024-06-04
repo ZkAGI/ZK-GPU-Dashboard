@@ -5,7 +5,7 @@ import { useClusterStore } from '../../hooks/store/useClusterStore';
 
 
 const ClusterPage: React.FC = () => {
-  const { data, error } = useSWR('http://109.205.183.41:3000/api/nodes', { refreshInterval: 8000 });
+  const { data, error } = useSWR('http://65.20.68.31:5000/api/nodes', { refreshInterval: 8000 });
   const { clusters, setClusters } = useClusterStore();
 
   useEffect(() => {
