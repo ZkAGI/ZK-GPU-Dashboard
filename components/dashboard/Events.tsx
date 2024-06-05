@@ -18,7 +18,7 @@ interface EventsData {
 }
 
 const Events: React.FC = () => {
-  const { data } = useSWR("http://65.20.68.31:5000/events", {
+  const { data } = useSWR("https://zynapse.zkagi.ai/events", {
     refreshInterval: 1000,
   });
   const { events, setEvents } = useEventsStore();

@@ -9,7 +9,7 @@ import { OpenLink2 } from "../icons/OpenLink2";
 import useSWR from "swr";
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
-  const { data, error } = useSWR("http://65.20.68.31:5000/api/nodes", {
+  const { data, error } = useSWR("https://zynapse.zkagi.ai/api/nodes", {
     refreshInterval: 8000,
   });
 
@@ -20,7 +20,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
     try {
       const response: any = await axios({
         method: "GET",
-        url: `http://104.131.170.196:3000/wallets/${walletAddress}/ip_addresses`,
+        url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
         data: {},
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                 try {
                   const postResponse = await axios({
                     method: "POST",
-                    url: "http://104.131.170.196:3000/ips",
+                    url: "https://zynapse.zkagi.ai/ips",
                     data: {
                       walletAddress: walletAddress,
                       nodeIP: [node.ip],
@@ -48,7 +48,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                     try {
                       const postResponse2 = await axios({
                         method: "POST",
-                        url: "http://104.131.170.196:3000/nodes",
+                        url: "https://zynapse.zkagi.ai/nodes",
                         data: {
                           node_id: node.ip,
                           start_time: "2024-05-29T13:53:16Z",
