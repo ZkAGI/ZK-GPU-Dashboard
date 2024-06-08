@@ -8,6 +8,7 @@ interface Gpu {
   name?: string;
   memoryTotal?:string
   memoryUsed?:string
+  utilizationGpu?:string
 }
 
 interface SummaryItem {
@@ -39,12 +40,14 @@ const ClusterPage: React.FC = () => {
         let diskUsed;
         let diskTotal;
         let diskPercentage;
+        let gpuPercent;
   
         if (Array.isArray(node.gpus)) {
           node.gpus.forEach((gpu: Gpu) => {
             if (gpu?.memoryTotal && gpu?.memoryUsed) {
               totalMemory += Number(gpu.memoryTotal);
               usedMemory += Number(gpu.memoryUsed);
+              gpuPercent = gpu.utilizationGpu
             }
           });
         }
@@ -81,7 +84,7 @@ const ClusterPage: React.FC = () => {
           ip: node?.ip,
           cpu: `${node.cpu}%`,
           memory: `${used}/${total}(${percentage}%)`,
-          //gpu: node.resourcesTotal.GPU || '0',
+          gpu: `${gpuPercent}%`,
           gram: `${totalMemory}/${usedMemory}`,
           diskRoot: `${diskUsed}/${diskTotal}(${diskPercentage}%)`,
           sent: `${sentGb}/s`,
