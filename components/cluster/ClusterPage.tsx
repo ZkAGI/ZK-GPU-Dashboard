@@ -79,6 +79,9 @@ const ClusterPage: React.FC = () => {
         let sentGb = '0';
         let receivedGb = '0';
         let id='0';
+        let total;
+        let percentage;
+        let used;
   
         if (Array.isArray(node.gpus)) {
           node.gpus.forEach((gpu: Gpu) => {
@@ -101,6 +104,9 @@ const ClusterPage: React.FC = () => {
         }
 
         if (Array.isArray(node.mem)) {
+          total = memoryConverter(node.mem[1])
+          percentage = node.mem[2].toFixed(2)
+          used = memoryConverter(node.mem[3])
           console.log(node.mem)
          }
 
@@ -111,7 +117,7 @@ const ClusterPage: React.FC = () => {
           id: id,
           ip: node?.ip,
           cpu: `${node.cpu}%`,
-          //memory: `${(node.objectStoreUsedMemory / (1024 * 1024)).toFixed(2)}MB/${(node.resourcesTotal.memory / (1024 * 1024)).toFixed(2)}MB`,
+          memory: `${used}/${total}(${percentage}%)`,
           //gpu: node.resourcesTotal.GPU || '0',
           gram: `${totalMemory}/${usedMemory}`,
           diskRoot: 'N/a',
