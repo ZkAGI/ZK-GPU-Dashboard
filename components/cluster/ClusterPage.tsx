@@ -41,6 +41,9 @@ const ClusterPage: React.FC = () => {
         let diskTotal;
         let diskPercentage;
         let gpuPercent;
+        let cpu;
+        let resourceMemory;
+        let object;
   
         if (Array.isArray(node.gpus)) {
           node.gpus.forEach((gpu: Gpu) => {
@@ -76,6 +79,11 @@ const ClusterPage: React.FC = () => {
           diskPercentage=rootDisk.percent
          }
 
+         if (node?.raylet.resourcesTotal) {
+          cpu = node.raylet.resourcesTotal.CPU
+          resourceMemory = memoryConverter(node.raylet.resourcesTotal.memory)
+          object = memoryConverter(node.raylet.resourcesTotal.object_store_memory)
+         }
 
         return {
           hostName: node?.hostname,
@@ -89,7 +97,7 @@ const ClusterPage: React.FC = () => {
           diskRoot: `${diskUsed}/${diskTotal}(${diskPercentage}%)`,
           sent: `${sentGb}/s`,
           received: `${receivedGb}/s`,
-          //logicalResources: `${node.resourcesTotal.CPU} CPU, ${node.resourcesTotal.GPU} GPU`,
+          logicalResources: `${cpu} CPU, ${resourceMemory} memory, ${object} object_store_memory`,
         };
       });
       setClusters(clusterData);
