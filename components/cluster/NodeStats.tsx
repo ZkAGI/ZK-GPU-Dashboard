@@ -1,19 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 const NodeStats: React.FC = () => {
+const { data, error } = useSWR('http://65.20.68.31/api/nodes', { refreshInterval: 8000 });
+
+const [idleCount, setIdleCount] = useState(0);
+const [aliveCount, setAliveCount] = useState(0);
+
+useEffect(() => {
+  if (data) {
+    console.log('Summary data:', data?.data?.summary);
+    const clusterData = data?.data?.summary;
+    if (clusterData) {
+      const idleNodes = clusterData.filter((node: any) => node.raylet.state === 'DEAD').length;
+      const aliveNodes = clusterData.filter((node: any) => node.raylet.state === 'ALIVE').length;
+      setIdleCount(idleNodes);
+      setAliveCount(aliveNodes);
+    }
+  }
+}, [data]);
+  
   return (
     <div className="grid grid-cols-3 justify-between gap-6 w-5/12 mb-6">
       <div className="border flex flex-row justify-around items-center p-2 rounded-lg">
         <div className="text-sm">TOTAL</div>
-        <div className="text-3xl">05</div>
+        <div className="text-3xl">{aliveCount+idleCount}</div>
       </div>
       <div className="border border-[#01B574] flex flex-row justify-around items-center p-2 rounded-lg">
         <div className="text-[#01B574] text-sm">ALIVE</div>
-        <div className="text-3xl">04</div>
+        <div className="text-3xl">{aliveCount}</div>
       </div>
       <div className="border border-[#FF3636] flex flex-row justify-around items-center p-2 rounded-lg">
         <div className="text-[#FF3636] text-sm">DEAD</div>
-        <div className="text-3xl">01</div>
+        <div className="text-3xl">{idleCount}</div>
       </div>
     </div>
   );
