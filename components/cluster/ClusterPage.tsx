@@ -1,63 +1,122 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClusterTable from './ClusterTable';
 import useSWR from 'swr';
 import { useClusterStore } from '../../hooks/store/useClusterStore';
+import { memoryConverter } from '@/utils/memoryConverter';
 
 interface Gpu {
   name?: string;
-  // Add other properties if needed
+  memoryTotal?:string
+  memoryUsed?:string
 }
 
 interface SummaryItem {
   gpus?: Gpu[];
   hostname?: string;
-  // Add other properties if needed
 }
 
 const ClusterPage: React.FC = () => {
-  const { data, error } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 8000 });
+  const { data, error } = useSWR('http://65.20.68.31/api/nodes', { refreshInterval: 8000 });
   const { clusters, setClusters } = useClusterStore();
 
-  // const res = data?.data?.summary.map((node: any) =>{
-  //   node?.hostname
-  // });
-
-  // console.log(res)
-
   const summary: SummaryItem[] | undefined = data?.data?.summary;
+  const [memoryTotal, setmemoryTotal] = useState<number | undefined>(undefined);
+  const [memoryUsed, setmemoryUsed] = useState<number | undefined>(undefined);
 
-if (Array.isArray(summary)) {
-  summary.forEach((item, index) => {
-    if (Array.isArray(item.gpus)) {
-      item.gpus.forEach((gpu, gpuIndex) => {
-        if (gpu?.name) {
-          console.log(`GPU name at index ${index}, GPU ${gpuIndex}: ${gpu.name}`);
-        }
-      });
-    }
-  });
-} else {
-  console.log("Summary is not an array or is undefined.");
-}
+
+// useEffect(() => {
+//   let totalMemory = 0;
+//   let usedMemory = 0;
+
+//   if (Array.isArray(summary)) {
+//     summary.forEach((item) => {
+//       if (Array.isArray(item.gpus)) {
+//         item.gpus.forEach((gpu) => {
+//           if (gpu?.memoryTotal && gpu?.memoryUsed) {
+//             totalMemory += Number(gpu.memoryTotal);
+//             usedMemory += Number(gpu.memoryUsed);
+//           }
+//         });
+//       }
+//     });
+//   }
+
+//   setmemoryTotal(totalMemory);
+//   setmemoryUsed(usedMemory);
+// }, [summary]);
 
   
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log('Summary data:', data?.data?.summary);
+  //     const clusterData = data?.data?.summary.map((node: any) => {
+  //       return {
+  //         hostName: node?.hostname,
+  //         state: node?.raylet.state,
+  //         id: node?.raylet.nodeId,
+  //         ip: node?.ip,
+  //         cpu: node.cpu,
+  //         // memory: `${(node.objectStoreUsedMemory / (1024 * 1024)).toFixed(2)}MB/${(node.resourcesTotal.memory / (1024 * 1024)).toFixed(2)}MB`,
+  //         // gpu: node.resourcesTotal.GPU || '0',
+  //         gram:  `${memoryTotal}/${memoryUsed}` ,
+  //         diskRoot: 'N/A', 
+  //         sent: 'N/A', 
+  //         received: 'N/A', 
+  //         // logicalResources: `${node.resourcesTotal.CPU} CPU, ${node.resourcesTotal.GPU} GPU`,
+  //       };
+  //     });
+  //     setClusters(clusterData);
+  //   }
+  // }, [data, setClusters]);
+
   useEffect(() => {
     if (data) {
       console.log('Summary data:', data?.data?.summary);
       const clusterData = data?.data?.summary.map((node: any) => {
+
+        let totalMemory = 0;
+        let usedMemory = 0;
+        let sentGb = '0';
+        let receivedGb = '0';
+        let id='0';
+  
+        if (Array.isArray(node.gpus)) {
+          node.gpus.forEach((gpu: Gpu) => {
+            if (gpu?.memoryTotal && gpu?.memoryUsed) {
+              totalMemory += Number(gpu.memoryTotal);
+              usedMemory += Number(gpu.memoryUsed);
+            }
+          });
+        }
+        setmemoryTotal(totalMemory);
+        setmemoryUsed(usedMemory);
+
+        if (Array.isArray(node.networkSpeed)) {
+          sentGb = memoryConverter(node.networkSpeed[0])
+          receivedGb = memoryConverter(node.networkSpeed[1])
+        }
+
+        if(node?.raylet.nodeId){
+          id = node?.raylet.nodeId.slice(0, 5) + '...'
+        }
+
+        if (Array.isArray(node.mem)) {
+          console.log(node.mem)
+         }
+
+
         return {
           hostName: node?.hostname,
           state: node?.raylet.state,
-          id: node?.raylet.nodeId,
+          id: id,
           ip: node?.ip,
-          cpu: node.cpu,
-          // memory: `${(node.objectStoreUsedMemory / (1024 * 1024)).toFixed(2)}MB/${(node.resourcesTotal.memory / (1024 * 1024)).toFixed(2)}MB`,
-          // gpu: node.resourcesTotal.GPU || '0',
-          // gram: `${(node.objectStoreUsedMemory / node.resourcsTotal.object_store_memory * 100).toFixed(2)}%`,
-          diskRoot: 'N/A', 
-          sent: 'N/A', 
-          received: 'N/A', 
-          // logicalResources: `${node.resourcesTotal.CPU} CPU, ${node.resourcesTotal.GPU} GPU`,
+          cpu: `${node.cpu}%`,
+          //memory: `${(node.objectStoreUsedMemory / (1024 * 1024)).toFixed(2)}MB/${(node.resourcesTotal.memory / (1024 * 1024)).toFixed(2)}MB`,
+          //gpu: node.resourcesTotal.GPU || '0',
+          gram: `${totalMemory}/${usedMemory}`,
+          diskRoot: 'N/a',
+          sent: `${sentGb}/s`,
+          received: `${receivedGb}/s`,
         };
       });
       setClusters(clusterData);

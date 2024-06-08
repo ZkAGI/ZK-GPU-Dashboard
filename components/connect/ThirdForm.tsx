@@ -7,11 +7,54 @@ import { Copy } from "../icons/Copy";
 import { OpenLink } from "../icons/OpenLink";
 import { OpenLink2 } from "../icons/OpenLink2";
 import useSWR from "swr";
+import { useEffect, useState } from "react";
+import { memoryConverter } from "@/utils/memoryConverter";
+
+
+require('dotenv').config();
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
-  const { data, error } = useSWR("https://zynapse.zkagi.ai/api/nodes", {
-    refreshInterval: 8000,
+  const { data, error } = useSWR("http://65.20.68.31/api/nodes", {
+     refreshInterval: 8000,
   });
+
+  interface Gpu {
+    name?: string;
+    memoryTotal?:string
+  memoryUsed?:string
+  memory?:string
+  }
+  
+  interface SummaryItem {
+    gpus?: Gpu[];
+    hostname?: string;
+    // Add other properties if needed
+  }
+  
+  const [gpuName, setGpuName] = useState<string | undefined>(undefined);
+  const [memoryTotal, setmemoryTotal] = useState<number | undefined>(undefined);
+  const [memoryUsed, setmemoryUsed] = useState<number | undefined>(undefined);
+  const [memory, setMemory] = useState<number | undefined>(undefined);
+  const [formattedData, setFormattedData] = useState<any>(undefined);
+  const [start, setStart] = useState<any>(undefined);
+  
+  useEffect(() => {
+    const summary: SummaryItem[] | undefined = data?.data?.summary;
+
+    if (Array.isArray(summary)) {
+      summary.forEach((item, index) => {
+        if (Array.isArray(item.gpus)) {
+          item.gpus.forEach((gpu, gpuIndex) => {
+            if (gpu?.name) {
+              setGpuName(gpu.name)
+            }
+          });
+        }
+      });
+    } else {
+      console.log("Summary is not an array or is undefined.");
+    }
+  }, [data]);
 
   const { publicKey, wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
@@ -20,10 +63,11 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
     try {
       const response: any = await axios({
         method: "GET",
-        url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
+        url: `http://65.20.68.31/wallets/${walletAddress}/ip_addresses`,
         data: {},
         headers: {
           "Content-Type": "application/json",
+          "api-key": "zk-123321"
         },
       });
       if (response.status === 200) {
@@ -31,34 +75,61 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         {
           data &&
             data?.data?.summary.map(async (node: any) => {
-              if (node?.ip === "172.17.0.2") {
+              if (node?.ip === "10.8.0.30") {
                 try {
                   const postResponse = await axios({
                     method: "POST",
-                    url: "https://zynapse.zkagi.ai/ips",
+                    url: "http://65.20.68.31/ips",
                     data: {
                       walletAddress: walletAddress,
-                      nodeIP: [node.ip],
+                      nodeIP: node.ip,
                     },
                     headers: {
                       "Content-Type": "application/json",
+                      "api-key": "zk-123321"
                     },
                   });
                   if (postResponse.status === 200) {
+                    let totalMemory = 0;
+        let usedMemory = 0;
+  
+        if (Array.isArray(node.gpus)) {
+          node.gpus.forEach((gpu: Gpu) => {
+            if (gpu?.memoryTotal && gpu?.memoryUsed) {
+              totalMemory += Number(gpu.memoryTotal);
+              usedMemory += Number(gpu.memoryUsed);
+            }
+          });
+        }
+
+        if (Array.isArray(node.mem)) {
+          setMemory(Number(memoryConverter(node.mem[1])))
+         }
+
+         if(node?.raylet.startTimeMs){
+          setStart(node?.raylet.startTimeMs)
+          const date = new  Date(Number(start))
+           setFormattedData(date.toISOString())
+        }
+
+        setmemoryTotal(totalMemory);
+        setmemoryUsed(usedMemory);
+        const totalMemoryGb = (totalMemory / (1024 * 1024 * 1024)).toFixed(2);
                     try {
                       const postResponse2 = await axios({
                         method: "POST",
-                        url: "https://zynapse.zkagi.ai/nodes",
+                        url: "http://65.20.68.31/api/nodes",
                         data: {
                           node_id: node.ip,
-                          start_time: "2024-05-29T13:53:16Z",
-                          gpu: "NVIDIA GTX 1080",
-                          gram: "8GB",
-                          memory: "16GB",
+                          start_time: formattedData,
+                          gpu: gpuName,
+                          gram: totalMemoryGb,
+                          memory: memory,
                           storage: "500GB SSD",
                         },
                         headers: {
                           "Content-Type": "application/json",
+                          "api-key": "zk-123321"
                         },
                       });
                       if (postResponse2.status === 200) {
