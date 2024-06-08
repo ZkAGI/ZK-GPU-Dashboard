@@ -39,33 +39,29 @@ export default function Home() {
       <main className="">
         {publicKey ? (
           <div className="flex flex-col w-full mb-2">
-            <div className=" grid grid-cols-5 gap-2 p-2">
-              <div className="text-white p-1">
+            <div className=" flex flex-col lg:flex-row gap-2 p-2">
+              <div className="text-white p-1 flex-grow">
                 <CapacityOverview />
               </div>
-              <div className="text-white rounded-lg p-1">
+              <div className="text-white rounded-lg p-1 flex-grow">
                 <GpuContribution />
               </div>
-              <div className=" col-span-2 text-white p-1">
+              <div className=" lg:col-span-2 text-white p-1 flex-grow">
                 <ReferralTracking />
               </div>
-              <div className="text-white rounded-lg p-1">
+              <div className="text-white rounded-lg p-1 flex-grow">
                 <NetworkCapacity />
               </div>
             </div>
-            <div className="grid grid-cols-8 gap-2 w-full">
-              <div className="col-span-3 text-white rounded-lg p-1">
+            <div className="flex flex-col lg:flex-row gap-2 w-full">
+              <div className=" text-white rounded-lg p-1 flex-grow">
                 <GPUNodesUtilization />
               </div>
-              <div className="col-span-3 gap-2">
-                <div className="col-span-3 text-white rounded-lg p-1">
+                <div className=" text-white rounded-lg p-1 flex-grow">
                   <GPUCapacity />
                 </div>
-              </div>
-              <div className="col-span-2">
-                <div className="col-span-3 text-white rounded-lg p-1">
+                <div className=" text-white rounded-lg p-1 flex-grow">
                   <Utilization />
-                </div>
               </div>
             </div>
             <div className=" p-2">

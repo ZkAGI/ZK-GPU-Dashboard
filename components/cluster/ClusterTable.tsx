@@ -225,7 +225,6 @@
 
 // export default ClusterTable;
 
-// ClusterTable.tsx
 import React from 'react';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
@@ -305,6 +304,9 @@ const ClusterTable: React.FC<{ data: ClusterData[] }> = ({ data }) => {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+  initialState: {
+    sorting: [{ id: 'state', desc: true }],
+  },
   });
 
   return (
