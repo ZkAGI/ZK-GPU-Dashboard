@@ -23,52 +23,6 @@ const ClusterPage: React.FC = () => {
   const [memoryTotal, setmemoryTotal] = useState<number | undefined>(undefined);
   const [memoryUsed, setmemoryUsed] = useState<number | undefined>(undefined);
 
-
-// useEffect(() => {
-//   let totalMemory = 0;
-//   let usedMemory = 0;
-
-//   if (Array.isArray(summary)) {
-//     summary.forEach((item) => {
-//       if (Array.isArray(item.gpus)) {
-//         item.gpus.forEach((gpu) => {
-//           if (gpu?.memoryTotal && gpu?.memoryUsed) {
-//             totalMemory += Number(gpu.memoryTotal);
-//             usedMemory += Number(gpu.memoryUsed);
-//           }
-//         });
-//       }
-//     });
-//   }
-
-//   setmemoryTotal(totalMemory);
-//   setmemoryUsed(usedMemory);
-// }, [summary]);
-
-  
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log('Summary data:', data?.data?.summary);
-  //     const clusterData = data?.data?.summary.map((node: any) => {
-  //       return {
-  //         hostName: node?.hostname,
-  //         state: node?.raylet.state,
-  //         id: node?.raylet.nodeId,
-  //         ip: node?.ip,
-  //         cpu: node.cpu,
-  //         // memory: `${(node.objectStoreUsedMemory / (1024 * 1024)).toFixed(2)}MB/${(node.resourcesTotal.memory / (1024 * 1024)).toFixed(2)}MB`,
-  //         // gpu: node.resourcesTotal.GPU || '0',
-  //         gram:  `${memoryTotal}/${memoryUsed}` ,
-  //         diskRoot: 'N/A', 
-  //         sent: 'N/A', 
-  //         received: 'N/A', 
-  //         // logicalResources: `${node.resourcesTotal.CPU} CPU, ${node.resourcesTotal.GPU} GPU`,
-  //       };
-  //     });
-  //     setClusters(clusterData);
-  //   }
-  // }, [data, setClusters]);
-
   useEffect(() => {
     if (data) {
       console.log('Summary data:', data?.data?.summary);
@@ -82,6 +36,9 @@ const ClusterPage: React.FC = () => {
         let total;
         let percentage;
         let used;
+        let diskUsed;
+        let diskTotal;
+        let diskPercentage;
   
         if (Array.isArray(node.gpus)) {
           node.gpus.forEach((gpu: Gpu) => {
@@ -107,7 +64,13 @@ const ClusterPage: React.FC = () => {
           total = memoryConverter(node.mem[1])
           percentage = node.mem[2].toFixed(2)
           used = memoryConverter(node.mem[3])
-          console.log(node.mem)
+         }
+
+         if (node.disk) {
+          const rootDisk = node.disk['/'];
+          diskUsed=memoryConverter(rootDisk.used)
+          diskTotal=memoryConverter(rootDisk.total)
+          diskPercentage=rootDisk.percent
          }
 
 
@@ -120,9 +83,10 @@ const ClusterPage: React.FC = () => {
           memory: `${used}/${total}(${percentage}%)`,
           //gpu: node.resourcesTotal.GPU || '0',
           gram: `${totalMemory}/${usedMemory}`,
-          diskRoot: 'N/a',
+          diskRoot: `${diskUsed}/${diskTotal}(${diskPercentage}%)`,
           sent: `${sentGb}/s`,
           received: `${receivedGb}/s`,
+          //logicalResources: `${node.resourcesTotal.CPU} CPU, ${node.resourcesTotal.GPU} GPU`,
         };
       });
       setClusters(clusterData);
