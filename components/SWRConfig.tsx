@@ -1,11 +1,25 @@
 "use client";
-import {SWRConfig as _SWRConfig} from "swr"
+import { SWRConfig as _SWRConfig } from "swr";
 
-export function SWRConfig({children}:{children:React.ReactNode})  {
-    return <_SWRConfig value={{
-        fetcher:(resource, init) => fetch(resource, init).then(res => res.json())
-    }}>
-        {children}
+export function SWRConfig({ children }: { children: React.ReactNode }) {
+  return (
+    <_SWRConfig
+      value={{
+        fetcher: (resource, init) => {
+          const headers = new Headers(init?.headers);
+          headers.set('Content-Type', 'application/json');
+          headers.set('api-key', "zk-123321"); 
+
+          const updatedInit = {
+            ...init,
+            headers,
+          };
+
+          return fetch(resource, updatedInit).then((res) => res.json());
+        },
+      }}
+    >
+      {children}
     </_SWRConfig>
+  );
 }
-
