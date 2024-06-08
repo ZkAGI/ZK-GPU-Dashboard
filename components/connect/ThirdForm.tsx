@@ -9,6 +9,8 @@ import { OpenLink2 } from "../icons/OpenLink2";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { memoryConverter } from "@/utils/memoryConverter";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Link from "next/link";
 
 require("dotenv").config();
 
@@ -17,7 +19,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
     refreshInterval: 8000,
   });
 
-  console.log('summary',data)
+  console.log("summary", data);
   interface Gpu {
     name?: string;
     memoryTotal?: string;
@@ -38,6 +40,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const [formattedData, setFormattedData] = useState<any>(undefined);
   const [start, setStart] = useState<any>(undefined);
   const [diskTotal, setDiskTotal] = useState<any>(undefined);
+  const [textToCopy, setTextToCopy] = useState("");
 
   useEffect(() => {
     const summary: SummaryItem[] | undefined = data?.data?.summary;
@@ -99,7 +102,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                           totalMemory += Number(gpu.memoryTotal);
                           usedMemory += Number(gpu.memoryUsed);
                           setmemoryTotal(totalMemory);
-                    setmemoryUsed(usedMemory);
+                          setmemoryUsed(usedMemory);
                         }
                       });
                     }
@@ -112,16 +115,14 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       setStart(node?.raylet.startTimeMs);
                       const date = new Date(Number(start));
                       setFormattedData(date.toISOString());
+                      console.log("formattedData", formattedData);
                     }
 
                     if (node.disk) {
                       const rootDisk = node.disk["/"];
                       setDiskTotal(rootDisk.total / (1024 * 1024 * 1024));
                     }
-                    const totalMemoryGb = (
-                      totalMemory /
-                      (1024)
-                    ).toFixed(2);
+                    const totalMemoryGb = (totalMemory / 1024).toFixed(2);
 
                     try {
                       const postResponse2 = await axios({
@@ -191,46 +192,60 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                         https://www.docker.com/products/docker-desktop/
                       </div>
                       <div className=" p-1 ">
-                        <OpenLink />
+                      <a target="_blank" href="https://www.docker.com/products/docker-desktop/"><OpenLink /></a>
                       </div>
                     </div>
                   </div>
                   <div className="border-2 border-[#2d3150] rounded-lg px-4 py-2 m-2">
                     <div>
                       <div className="text-sm">Download Docker Image</div>
-                      <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row justify-between items-center">
-                        <div className="text-xs">
-                          docker pull zkagi/connect2cluster:latest
+                      <CopyToClipboard
+                        text="docker pull zkagi/connect2cluster:latest"
+                        onCopy={() =>
+                          toast.success("Text copied to clipboard!")
+                        }
+                      >
+                        <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row justify-between items-center">
+                          <div className="text-xs">
+                            docker pull zkagi/connect2cluster:latest
+                          </div>
+                          <div className="p-1">
+                            <Copy />
+                          </div>
                         </div>
-                        <div className="p-1">
-                          <Copy />
-                        </div>
-                      </div>
+                      </CopyToClipboard>
                     </div>
                     <div className="mx-10 my-4">
-                      <div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
+                    <a target="_blank" href="https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html"><div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
                         <div>
                           <OpenLink2 />
                         </div>
                         <div>CUDA Toolkit download and setup</div>
-                      </div>
-                      <div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
+                      </div></a>
+                      <a target="_blank" href="https://www.nvidia.com/Download/index.aspx"><div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
                         <div>
                           <OpenLink2 />
                         </div>
                         <div>Nvidia Drivers Installation</div>
-                      </div>
+                      </div></a>
                     </div>
                     <div>
                       <div className="text-sm">Run Docker Image</div>
-                      <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
-                        <div className="w-3/4 text-xs">
-                          {`docker run -dit -e "wallet=${walletAddress}" --privileged --network host zkagi/connect2cluster:latest`}
+                      <CopyToClipboard
+                        text={`docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster:latest`}
+                        onCopy={() =>
+                          toast.success("Text copied to clipboard!")
+                        }
+                      >
+                        <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
+                          <div className="w-3/4 text-xs">
+                            {`docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster:latest`}
+                          </div>
+                          <div className=" p-1">
+                            <Copy />
+                          </div>
                         </div>
-                        <div className=" p-1">
-                          <Copy />
-                        </div>
-                      </div>
+                      </CopyToClipboard>
                     </div>
                   </div>
                 </div>
