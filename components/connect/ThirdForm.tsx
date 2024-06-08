@@ -10,34 +10,35 @@ import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { memoryConverter } from "@/utils/memoryConverter";
 
-
-require('dotenv').config();
+require("dotenv").config();
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
   const { data, error } = useSWR("http://65.20.68.31/api/nodes", {
-     refreshInterval: 8000,
+    refreshInterval: 8000,
   });
 
+  console.log('summary',data)
   interface Gpu {
     name?: string;
-    memoryTotal?:string
-  memoryUsed?:string
-  memory?:string
+    memoryTotal?: string;
+    memoryUsed?: string;
+    memory?: string;
   }
-  
+
   interface SummaryItem {
     gpus?: Gpu[];
     hostname?: string;
     // Add other properties if needed
   }
-  
+
   const [gpuName, setGpuName] = useState<string | undefined>(undefined);
   const [memoryTotal, setmemoryTotal] = useState<number | undefined>(undefined);
   const [memoryUsed, setmemoryUsed] = useState<number | undefined>(undefined);
   const [memory, setMemory] = useState<number | undefined>(undefined);
   const [formattedData, setFormattedData] = useState<any>(undefined);
   const [start, setStart] = useState<any>(undefined);
-  
+  const [diskTotal, setDiskTotal] = useState<any>(undefined);
+
   useEffect(() => {
     const summary: SummaryItem[] | undefined = data?.data?.summary;
 
@@ -46,7 +47,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         if (Array.isArray(item.gpus)) {
           item.gpus.forEach((gpu, gpuIndex) => {
             if (gpu?.name) {
-              setGpuName(gpu.name)
+              setGpuName(gpu.name);
             }
           });
         }
@@ -67,7 +68,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         data: {},
         headers: {
           "Content-Type": "application/json",
-          "api-key": "zk-123321"
+          "api-key": "zk-123321",
         },
       });
       if (response.status === 200) {
@@ -75,61 +76,68 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         {
           data &&
             data?.data?.summary.map(async (node: any) => {
-              if (node?.ip === "10.8.0.30") {
+              if (node?.ip === current_ip) {
                 try {
                   const postResponse = await axios({
                     method: "POST",
                     url: "http://65.20.68.31/ips",
                     data: {
-                      walletAddress: walletAddress,
-                      nodeIP: node.ip,
+                      ip_address: current_ip,
+                      node_id: node.raylet.nodeId,
                     },
                     headers: {
                       "Content-Type": "application/json",
-                      "api-key": "zk-123321"
+                      "api-key": "zk-123321",
                     },
                   });
                   if (postResponse.status === 200) {
                     let totalMemory = 0;
-        let usedMemory = 0;
-  
-        if (Array.isArray(node.gpus)) {
-          node.gpus.forEach((gpu: Gpu) => {
-            if (gpu?.memoryTotal && gpu?.memoryUsed) {
-              totalMemory += Number(gpu.memoryTotal);
-              usedMemory += Number(gpu.memoryUsed);
-            }
-          });
-        }
+                    let usedMemory = 0;
+                    if (Array.isArray(node.gpus)) {
+                      node.gpus.forEach((gpu: Gpu) => {
+                        if (gpu?.memoryTotal && gpu?.memoryUsed) {
+                          totalMemory += Number(gpu.memoryTotal);
+                          usedMemory += Number(gpu.memoryUsed);
+                          setmemoryTotal(totalMemory);
+                    setmemoryUsed(usedMemory);
+                        }
+                      });
+                    }
 
-        if (Array.isArray(node.mem)) {
-          setMemory(Number(memoryConverter(node.mem[1])))
-         }
+                    if (Array.isArray(node.mem)) {
+                      setMemory(Number(node.mem[1]) / (1024 * 1024 * 1024));
+                    }
 
-         if(node?.raylet.startTimeMs){
-          setStart(node?.raylet.startTimeMs)
-          const date = new  Date(Number(start))
-           setFormattedData(date.toISOString())
-        }
+                    if (node?.raylet.startTimeMs) {
+                      setStart(node?.raylet.startTimeMs);
+                      const date = new Date(Number(start));
+                      setFormattedData(date.toISOString());
+                    }
 
-        setmemoryTotal(totalMemory);
-        setmemoryUsed(usedMemory);
-        const totalMemoryGb = (totalMemory / (1024 * 1024 * 1024)).toFixed(2);
+                    if (node.disk) {
+                      const rootDisk = node.disk["/"];
+                      setDiskTotal(rootDisk.total / (1024 * 1024 * 1024));
+                    }
+                    const totalMemoryGb = (
+                      totalMemory /
+                      (1024)
+                    ).toFixed(2);
+
                     try {
                       const postResponse2 = await axios({
                         method: "POST",
-                        url: "http://65.20.68.31/api/nodes",
+                        url: "http://65.20.68.31/nodes",
                         data: {
-                          node_id: node.ip,
+                          node_id: node.raylet.nodeId,
                           start_time: formattedData,
                           gpu: gpuName,
                           gram: totalMemoryGb,
-                          memory: memory,
-                          storage: "500GB SSD",
+                          memory: memory?.toString(),
+                          storage: diskTotal?.toString(),
                         },
                         headers: {
                           "Content-Type": "application/json",
-                          "api-key": "zk-123321"
+                          "api-key": "zk-123321",
                         },
                       });
                       if (postResponse2.status === 200) {
@@ -192,7 +200,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       <div className="text-sm">Download Docker Image</div>
                       <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row justify-between items-center">
                         <div className="text-xs">
-                          docker pull Zkagi/ConnectCluster
+                          docker pull zkagi/connect2cluster:latest
                         </div>
                         <div className="p-1">
                           <Copy />
@@ -217,7 +225,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       <div className="text-sm">Run Docker Image</div>
                       <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
                         <div className="w-3/4 text-xs">
-                          {`docker run -dit -e "wallet=${walletAddress}" --privileged --network host Zkagi/ConnectCluster`}
+                          {`docker run -dit -e "wallet=${walletAddress}" --privileged --network host zkagi/connect2cluster:latest`}
                         </div>
                         <div className=" p-1">
                           <Copy />
