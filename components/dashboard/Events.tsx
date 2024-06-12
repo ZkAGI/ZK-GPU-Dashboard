@@ -21,6 +21,7 @@ const Events: React.FC = () => {
   const { data } = useSWR("https://zynapse.zkagi.ai/events", {
     refreshInterval: 1000,
   });
+
   const { events, setEvents } = useEventsStore();
 
   useEffect(() => {
@@ -36,8 +37,12 @@ const Events: React.FC = () => {
         accessorKey: "severity",
         cell: ({ getValue }) => {
           const severity = getValue() as EventsData["severity"];
-          const bgColor = severity === "ERROR" ? "bg-[#FFFFFF] text-center w-3/4" : "bg-[#FFFFFF] text-center w-1/2";
-          const textColor = severity === "ERROR" ? "text-[#FF3636]" : "text-[#01B574]";
+          const bgColor =
+            severity === "ERROR"
+              ? "bg-[#FFFFFF] text-center w-20"
+              : "bg-[#FFFFFF] text-center w-1/2";
+          const textColor =
+            severity === "ERROR" ? "text-[#FF3636]" : "text-[#01B574]";
           return (
             <div className={`p-1 rounded ${bgColor} text-white`}>
               <span className={textColor}>{severity}</span>
@@ -72,7 +77,7 @@ const Events: React.FC = () => {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 5,
+        pageSize: 6,
       },
     },
   });
@@ -93,14 +98,18 @@ const Events: React.FC = () => {
                 <div className="rounded-full size-3 bg-[#01B574]"></div>
                 <div className="text-[#A0AEC0]">Success</div>
               </div>
-              <div className="text-[#A0AEC0] flex justify-end mr-2">{successCount}</div>
+              <div className="text-[#A0AEC0] flex justify-end mr-2">
+                {successCount}
+              </div>
             </div>
             <div className="grid grid-cols-2 rounded-lg p-1 px-2 bg-[#D9D9D9] bg-opacity-10">
               <div className="flex justify-center gap-2 items-center">
                 <div className="rounded-full size-3 bg-[#FF5252]"></div>
                 <div className="text-[#A0AEC0]">Error</div>
               </div>
-              <div className="text-[#A0AEC0] flex justify-end mr-2">{errorCount}</div>
+              <div className="text-[#A0AEC0] flex justify-end mr-2">
+                {errorCount}
+              </div>
             </div>
           </div>
         </div>
@@ -109,7 +118,10 @@ const Events: React.FC = () => {
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="">
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="py-2 font-light text-left text-xs px-2">
+                  <th
+                    key={header.id}
+                    className="py-2 font-light text-left text-xs px-2"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -122,23 +134,52 @@ const Events: React.FC = () => {
             ))}
           </thead>
           <div className="flex justify-between items-center my-2 mb-4">
-            <div className="flex gap-1">
+            <div className="flex gap-1 w-10">
               <button
-                className="px-3 py-1  text-white rounded disabled:opacity-50"
+                className="px-3 py-1 text-white rounded disabled:opacity-50"
+                onClick={() => table.setPageIndex(0)}
+                disabled={table.getState().pagination.pageIndex === 0}
+              >
+                {"<<"}
+              </button>
+              <button
+                className="px-3 py-1 text-white rounded disabled:opacity-50"
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
               >
                 {"<"}
               </button>
-              {Array.from({ length: table.getPageCount() }, (_, index) => (
-                <button
-                  key={index}
-                  className={`px-3 py-1  text-white rounded ${table.getState().pagination.pageIndex === index ? "border" : ""}`}
-                  onClick={() => table.setPageIndex(index)}
-                >
-                  {index + 1}
-                </button>
-              ))}
+              {Array.from(
+                { length: Math.min(5, table.getPageCount()) },
+                (_, index) => {
+                  const pageNumber =
+                    table.getState().pagination.pageIndex + index +1;
+                  return pageNumber <= table.getPageCount() ? (
+                    <button
+                      key={pageNumber}
+                      className={`px-3 py-1 text-white rounded ${
+                        table.getState().pagination.pageIndex === pageNumber - 1
+                          ? "border"
+                          : ""
+                      }`}
+                      onClick={() => table.setPageIndex(pageNumber - 1)}
+                    >
+                      {pageNumber}
+                    </button>
+                  ) : null;
+                }
+              )}
+              {table.getPageCount() > 5 && (
+                <>
+                  <span className="px-3 py-1 text-white">...</span>
+                  <button
+                    className="px-3 py-1 text-white rounded"
+                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  >
+                    {table.getPageCount()}
+                  </button>
+                </>
+              )}
               <button
                 className="px-3 py-1 text-white rounded disabled:opacity-50"
                 onClick={() => table.nextPage()}
@@ -146,13 +187,26 @@ const Events: React.FC = () => {
               >
                 {">"}
               </button>
+              <button
+                className="px-3 py-1 text-white rounded disabled:opacity-50"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={
+                  table.getState().pagination.pageIndex ===
+                  table.getPageCount() - 1
+                }
+              >
+                {">>"}
+              </button>
             </div>
           </div>
           <tbody className="border-t border-[#56577A]">
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="text-xs mx-2">
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="py-2 px-2 border-b border-[#56577A]">
+                  <td
+                    key={cell.id}
+                    className="py-2 px-2 border-b border-[#56577A]"
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

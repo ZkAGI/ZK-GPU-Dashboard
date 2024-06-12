@@ -26,10 +26,9 @@ interface SummaryItem {
 
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
-  const { data, error } = useSWR("http://65.20.68.31/api/nodes", {
+  const { data, error } = useSWR("https://zynapse.zkagi.ai/api/nodes", {
     refreshInterval: 8000,
   });
-
   const [gpuName, setGpuName] = useState<string | undefined>(undefined);
   const [memoryTotal, setmemoryTotal] = useState<number | undefined>(undefined);
   const [memoryUsed, setmemoryUsed] = useState<number | undefined>(undefined);
@@ -40,6 +39,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const [textToCopy, setTextToCopy] = useState("");
   const { deviceType } = useConnectStore();
   const router = useRouter();
+  const [isConnecting, setIsConnecting] = useState(false);
 
   useEffect(() => {
     const summary: SummaryItem[] | undefined = data?.data?.summary;
@@ -63,15 +63,16 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
   const dockerRunCommand = (deviceType === 'gpu')
-    ? `docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster:latest`
-    : `docker run -dit -e "wallet=${walletAddress}" --privileged --network host zkagi/connect2cluster:latest`;
+    ? `docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster`
+    : `docker run -dit -e "wallet=${walletAddress}" --privileged --network host zkagi/connect2cluster`;
 
 
   const handleSubmit = async () => {
     try {
+      setIsConnecting(true);
       const response: any = await axios({
         method: "GET",
-        url: `http://65.20.68.31/wallets/${walletAddress}/ip_addresses`,
+        url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
         data: {},
         headers: {
           "Content-Type": "application/json",
@@ -83,79 +84,84 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         {
           data &&
             data?.data?.summary.map(async (node: any) => {
-              if (node?.ip === current_ip) {
-                try {    
-                  const postResponse = await axios({
-                    method: "POST",
-                    url: "http://65.20.68.31/ips",
-                    data: {
-                      ip_address: current_ip,
-                      node_id: node.raylet.nodeId,
-                    },
-                    headers: {
-                      "Content-Type": "application/json",
-                      "api-key": "zk-123321",
-                    },
-                  });
-                  if (postResponse.status === 200) {
-                    let totalMemory = 0;
-                    let usedMemory = 0;
-                    if (Array.isArray(node.gpus)) {
-                      node.gpus.forEach((gpu: Gpu) => {
-                        if (gpu?.memoryTotal && gpu?.memoryUsed) {
-                          totalMemory += Number(gpu.memoryTotal);
-                          usedMemory += Number(gpu.memoryUsed);
-                          setmemoryTotal(totalMemory);
-                          setmemoryUsed(usedMemory);
-                        }
-                      });
-                    }
+              if (node?.raylet.state=='ALIVE' && node?.ip === current_ip) {
+                toast.success("Successfully connected!");
+                setIsConnecting(false);
+                router.push('/cluster')
+                // try {    
+                //   const postResponse = await axios({
+                //     method: "POST",
+                //     url: "http://65.20.68.31/ips",
+                //     data: {
+                //       ip_address: current_ip,
+                //       node_id: node.raylet.nodeId,
+                //     },
+                //     headers: {
+                //       "Content-Type": "application/json",
+                //       "api-key": "zk-123321",
+                //     },
+                //   });
+                //   if (postResponse.status === 200) {
+                //     let totalMemory = 0;
+                //     let usedMemory = 0;
+                //     if (Array.isArray(node.gpus)) {
+                //       node.gpus.forEach((gpu: Gpu) => {
+                //         if (gpu?.memoryTotal && gpu?.memoryUsed) {
+                //           totalMemory += Number(gpu.memoryTotal);
+                //           usedMemory += Number(gpu.memoryUsed);
+                //           setmemoryTotal(totalMemory);
+                //           setmemoryUsed(usedMemory);
+                //         }
+                //       });
+                //     }
 
-                    if (Array.isArray(node.mem)) {
-                      setMemory(Number(node.mem[1]) / (1024 * 1024 * 1024));
-                    }
+                //     if (Array.isArray(node.mem)) {
+                //       setMemory(Number(node.mem[1]) / (1024 * 1024 * 1024));
+                //     }
 
-                    if (node?.raylet.startTimeMs) {
-                      setStart(node?.raylet.startTimeMs);
-                      const date = new Date(Number(start));
-                      setFormattedData(date.toISOString());
-                    }
+                //     if (node?.raylet.startTimeMs) {
+                //       setStart(node?.raylet.startTimeMs);
+                //       const date = new Date(Number(start));
+                //       setFormattedData(date.toISOString());
+                //     }
 
-                    if (node.disk) {
-                      const rootDisk = node.disk["/"];
-                      setDiskTotal(rootDisk.total / (1024 * 1024 * 1024));
-                    }
-                    const totalMemoryGb = (totalMemory / 1024).toFixed(2);
+                //     if (node.disk) {
+                //       const rootDisk = node.disk["/"];
+                //       setDiskTotal(rootDisk.total / (1024 * 1024 * 1024));
+                //     }
+                //     const totalMemoryGb = (totalMemory / 1024).toFixed(2);
 
-                    try {
-                      const postResponse2 = await axios({
-                        method: "POST",
-                        url: "http://65.20.68.31/nodes",
-                        data: {
-                          node_id: node.raylet.nodeId,
-                          start_time: formattedData,
-                          gpu: gpuName,
-                          gram: totalMemoryGb,
-                          memory: memory?.toString(),
-                          storage: diskTotal?.toString(),
-                        },
-                        headers: {
-                          "Content-Type": "application/json",
-                          "api-key": "zk-123321",
-                        },
-                      });
-                      if (postResponse2.status === 200) {
-                        toast.success("Successfully connected!");
-                        router.push('/cluster')
+                //     try {
+                //       const postResponse2 = await axios({
+                //         method: "POST",
+                //         url: "http://65.20.68.31/nodes",
+                //         data: {
+                //           node_id: node.raylet.nodeId,
+                //           start_time: formattedData,
+                //           gpu: gpuName,
+                //           gram: totalMemoryGb,
+                //           memory: memory?.toString(),
+                //           storage: diskTotal?.toString(),
+                //         },
+                //         headers: {
+                //           "Content-Type": "application/json",
+                //           "api-key": "zk-123321",
+                //         },
+                //       });
+                //       if (postResponse2.status === 200) {
+                //         toast.success("Successfully connected!");
                         
-                      }
-                    } catch (error) {
-                      console.error("Error making POST request:", error);
-                    }
-                  }
-                } catch (error) {
-                  console.error("Error making POST request:", error);
-                }
+                //       }
+                //     } catch (error) {
+                //       console.error("Error making POST request:", error);
+                //     }finally {
+                //       setIsConnecting(false);
+                //       router.push('/cluster')
+                //     }
+                //   }
+                // } catch (error) {
+                //   console.error("Error making POST request:", error);
+                // }
               }
             });
         }
@@ -255,9 +261,16 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
 
           <div className="flex justify-end w-1/2 my-2">
             <div className=" flex justify-end w-1/2">
+              {/* <ButtonV2>
+                <button>CONNECT</button>
+              </ButtonV2> */}
+               {isConnecting ? (
+              <div>Connecting...</div> 
+            ) : (
               <ButtonV2>
                 <button>CONNECT</button>
               </ButtonV2>
+            )}
             </div>
           </div>
         </form>
