@@ -58,7 +58,7 @@ const Metric = ({ center, xp }: { center: number[], xp: number }) => {
 export default function TotalEarningChart() {
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
-  const { data, error } = useSWR(`http://65.20.68.31/wallets/${walletAddress}/xp`, { refreshInterval: 8000 });
+  const { data, error } = useSWR(`https://zynapse.zkagi.ai/wallets/${walletAddress}/xp`, { refreshInterval: 8000 });
   return (
     <div className="App">
       <div style={styles.root}>
