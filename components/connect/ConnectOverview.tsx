@@ -1,6 +1,5 @@
 "use client";
 
-import { Field, Form } from "houseform";
 import { SecondForm } from "./SecondForm";
 import { ThirdForm } from "./ThirdForm";
 import { Radio } from "./Radio";
@@ -44,7 +43,6 @@ function RenderSequentially({
   setIndex:React.Dispatch<React.SetStateAction<number>>,
   setShowForms: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  // const [index, setIndex] = useState(0);
 
   const onNext = () => setIndex((existing) => existing + 1);
   const onPrev = () => {
@@ -58,11 +56,6 @@ function RenderSequentially({
   console.log(index, forms[index]);
 
   return (
-    // <>
-    //   <pre>{JSON.stringify(description)}</pre>
-    //   <pre>{index}</pre>
-    //   {showForms && forms[index] && forms[index](onNext)}
-    // </>
     <div className="">
       <div className="flex items-center justify-center space-x-4 mb-6 mx-60">
         {description.map((step, i) => (
@@ -157,58 +150,4 @@ export function ConnectOverview() {
     </>
   );
 
-  //   return (
-  //     <>
-  //       <Form onSubmit={handleSubmit}>
-  //         {({ submit, isValid, value: formValue }) => (
-  //           <form
-  //             onSubmit={(e) => {
-  //               e.preventDefault();
-  //               isValid && submit();
-  //             }}
-  //             className="flex flex-col"
-  //           >
-  //             <RenderSequentially forms={formComponents} os={formValue.os|| 'darwin'}  />
-  //             {formComponents.length==0 && <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 rounded-md w-1/4">
-  //                 <div className="bg-[#060B28] p-4 rounded-md">
-  //                 <Field name="os" initialValue='darwin'>
-  //                             {({ value, setValue }) => (
-  //                               <div>
-  //                                 <Radio
-  //                                   name="os"
-  //                                   value="darwin"
-  //                                   text="macOS"
-  //                                   onChange={(value) => setValue(value)}
-  //                                   checked={value == "darwin"}
-  //                                 />
-  //                                 <Radio
-  //                                   name="os"
-  //                                   value="win32"
-  //                                   text="Windows"
-  //                                   onChange={(value) => setValue(value)}
-  //                                   checked={value == "win32"}
-  //                                 />
-  //                                 <Radio
-  //                                   name="os"
-  //                                   value="linux"
-  //                                   text="Ubuntu"
-  //                                   onChange={(value) => setValue(value)}
-  //                                   checked={value == "linux"}
-  //                                 />
-  //                               </div>
-  //                             )}
-  //                           </Field>
-  //                           <div className="flex justify-end">
-  //                             <ButtonV2>
-  //                               <button>NEXT STEP</button>
-  //                             </ButtonV2>
-  //                           </div>
-  //                 </div>
-  //               </div>
-  //             }
-  //           </form>
-  //         )}
-  //       </Form>
-  //     </>
-  //   );
 }
