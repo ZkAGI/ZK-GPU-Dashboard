@@ -1,5 +1,5 @@
 import React from 'react';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 interface ClusterData {
   hostName: string;
@@ -77,8 +77,9 @@ const ClusterTable: React.FC<{ data: ClusterData[] }> = ({ data }) => {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   initialState: {
-    sorting: [{ id: 'state', desc: true }],
+    sorting: [{ id: 'state', desc: false }],
   },
   });
 

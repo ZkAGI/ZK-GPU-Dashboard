@@ -9,14 +9,14 @@ interface LeaderboardItem {
 }
 
 const TotalNetworkCapacity: React.FC = () => {
-  const { data, error } = useSWR("http://65.20.68.31/xps/all", {
+  const { data, error } = useSWR("https://zynapse.zkagi.ai/xps/all", {
     refreshInterval: 8000,
   });
 
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
-  const sortedData = data ? [...data].sort((a, b) => b.points - a.points) : [];
+  const sortedData = Array.isArray(data) ? [...data].sort((a, b) => b.points - a.points) : [];
 
   const userIndex = sortedData.findIndex(
     (item) => item.wallet_address === walletAddress
@@ -89,13 +89,13 @@ const TotalNetworkCapacity: React.FC = () => {
             </div>
           ))}
         </div>
-        {/* <div>
+        <div>
           {userIndex !== -1 &&
             sortedData
               .slice(Math.max(0, userIndex - 1), userIndex + 2)
               .map(renderLeaderboardItem)}
-        </div> */}
-        <div>
+        </div>
+        {/* <div>
           {userIndex !== -1 &&
             sortedData
               .slice(
@@ -103,7 +103,7 @@ const TotalNetworkCapacity: React.FC = () => {
                 userIndex === 0 ? userIndex + 3 : userIndex + 2
               )
               .map(renderLeaderboardItem)}
-        </div>
+        </div> */}
       </div>
     </div>
   );

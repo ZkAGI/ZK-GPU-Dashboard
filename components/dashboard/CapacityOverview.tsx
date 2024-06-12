@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 const CapacityOverview: React.FC = () => {
-  const {data,error} =useSWR('http://65.20.68.31/api/nodes')
+  const {data,error} =useSWR('https://zynapse.zkagi.ai/api/nodes')
   const [gpuCapacity, setGPUCapacity] = useState<any>(0);
   const [cpuCapacity, setCPUCapacity] = useState<any>(0);
   const [aliveCount, setAliveCount] = useState(0);
