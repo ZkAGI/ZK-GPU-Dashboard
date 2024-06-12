@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 const NodeStats: React.FC = () => {
-const { data, error } = useSWR('http://65.20.68.31/api/nodes', { refreshInterval: 1000 });
+const { data, error } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 1000 });
 
 const [idleCount, setIdleCount] = useState(0);
 const [aliveCount, setAliveCount] = useState(0);

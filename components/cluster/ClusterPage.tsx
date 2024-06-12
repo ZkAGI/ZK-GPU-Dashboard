@@ -18,14 +18,14 @@ interface SummaryItem {
 }
 
 const ClusterPage: React.FC = () => {
-  const { data, error } = useSWR('http://65.20.68.31/api/nodes', { refreshInterval: 1000 });
+  const { data, error } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 1000 });
   const { clusters, setClusters } = useClusterStore();
 
   const summary: SummaryItem[] | undefined = data?.data?.summary;
-  const [memoryTotal, setmemoryTotal] = useState<number | undefined>(undefined);
-  const [memoryUsed, setmemoryUsed] = useState<number | undefined>(undefined);
-  const [formattedData, setFormattedData] = useState<any>(undefined);
-  const [start, setStart] = useState<any>(undefined);
+  const [memoryTotal, setmemoryTotal] = useState<number | undefined>(0);
+  const [memoryUsed, setmemoryUsed] = useState<number | undefined>(0);
+  const [formattedData, setFormattedData] = useState<any>([]);
+  const [start, setStart] = useState<any>(null);
 
   useEffect(() => {
     if (data) {
@@ -88,27 +88,11 @@ const ClusterPage: React.FC = () => {
           object = memoryConverter(node.raylet.resourcesTotal.object_store_memory)
          }
 
-        //  if(node?.raylet.state ==='DEAD'){
-        //   if(node?.raylet.endTimeMs){
-        //   setStart(node?.raylet.endTimeMs);
-        //   const date = new Date(Number(start));
-        //   setFormattedData(date.toISOString());
-        //  }
-        //   const postResponse = await axios({
-        //     method: "PUT",
-        //     url: `http://65.20.68.31/nodes/${id}/end-time`,
-        //     data: {
-        //       "end_time":formattedData
-        //     },
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       "api-key": "zk-123321",
-        //     },
-        //   });
-        //  if(postResponse.status !== 200){
-        //   console.log('Error in end time')
-        //  }
-        //  }
+        if (node?.raylet.state === 'DEAD' && node?.raylet?.endTimeMs) {
+          const date = new Date(Number(node?.raylet?.endTimeMs));
+          const formattedData = date.toISOString();
+          sendEndTime(node?.raylet.nodeId, formattedData);
+        }
 
         return {
           hostName: node?.hostname,
@@ -126,38 +110,30 @@ const ClusterPage: React.FC = () => {
         };
       });
       setClusters(clusterData);
-      clusterData.forEach(async (node:any) => {
-        if (node.state === 'DEAD') {
-          const endTimeMs = node?.raylet?.endTimeMs;
-          if (endTimeMs) {
-            const date = new Date(Number(endTimeMs));
-            const formattedData = date.toISOString();
-
-            try {
-              const postResponse = await axios({
-                method: "PUT",
-                url: `http://65.20.68.31/nodes/${node?.raylet.nodeId}/end-time`,
-                data: {
-                  "end_time": formattedData
-                },
-                headers: {
-                  "Content-Type": "application/json",
-                  "api-key": "zk-123321",
-                },
-              });
-              if (postResponse.status !== 200) {
-                console.log(node?.raylet.nodeId)
-                console.log('Error in end time');
-              }
-            } catch (error) {
-              console.error('Error while performing PUT request:', error);
-            }
-          }
-        }
-      });
-
     }
   }, [data, setClusters]);
+
+  const sendEndTime = async (nodeId: string, endTime: string) => {
+    try {
+      const postResponse = await axios({
+        method: "PUT",
+        url: `https://zynapse.zkagi.ai/nodes/${nodeId}/end-time`,
+        data: {
+          "end_time": endTime
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": "zk-123321",
+        },
+      });
+      if (postResponse.status !== 200) {
+        console.log(nodeId);
+        console.log('Error in end time');
+      }
+    } catch (error) {
+      console.error('Error while performing PUT request:', error);
+    }
+  };
 
   if (error) {
     console.error('Error fetching data:', error);
