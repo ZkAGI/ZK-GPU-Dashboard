@@ -8,30 +8,27 @@ import { OpenLink } from "../icons/OpenLink";
 import { OpenLink2 } from "../icons/OpenLink2";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
-import { memoryConverter } from "@/utils/memoryConverter";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import Link from "next/link";
+import { useConnectStore } from "@/hooks/store/useDeviceStore";
+import { useRouter } from 'next/navigation';
 
-require("dotenv").config();
+interface Gpu {
+  name?: string;
+  memoryTotal?: string;
+  memoryUsed?: string;
+  memory?: string;
+}
+
+interface SummaryItem {
+  gpus?: Gpu[];
+  hostname?: string;
+}
+
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
   const { data, error } = useSWR("http://65.20.68.31/api/nodes", {
     refreshInterval: 8000,
   });
-
-  console.log("summary", data);
-  interface Gpu {
-    name?: string;
-    memoryTotal?: string;
-    memoryUsed?: string;
-    memory?: string;
-  }
-
-  interface SummaryItem {
-    gpus?: Gpu[];
-    hostname?: string;
-    // Add other properties if needed
-  }
 
   const [gpuName, setGpuName] = useState<string | undefined>(undefined);
   const [memoryTotal, setmemoryTotal] = useState<number | undefined>(undefined);
@@ -41,6 +38,8 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const [start, setStart] = useState<any>(undefined);
   const [diskTotal, setDiskTotal] = useState<any>(undefined);
   const [textToCopy, setTextToCopy] = useState("");
+  const { deviceType } = useConnectStore();
+  const router = useRouter();
 
   useEffect(() => {
     const summary: SummaryItem[] | undefined = data?.data?.summary;
@@ -63,6 +62,11 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const { publicKey, wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
+  const dockerRunCommand = (deviceType === 'gpu')
+    ? `docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster:latest`
+    : `docker run -dit -e "wallet=${walletAddress}" --privileged --network host zkagi/connect2cluster:latest`;
+
+
   const handleSubmit = async () => {
     try {
       const response: any = await axios({
@@ -80,7 +84,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
           data &&
             data?.data?.summary.map(async (node: any) => {
               if (node?.ip === current_ip) {
-                try {
+                try {    
                   const postResponse = await axios({
                     method: "POST",
                     url: "http://65.20.68.31/ips",
@@ -115,7 +119,6 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       setStart(node?.raylet.startTimeMs);
                       const date = new Date(Number(start));
                       setFormattedData(date.toISOString());
-                      console.log("formattedData", formattedData);
                     }
 
                     if (node.disk) {
@@ -143,6 +146,8 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       });
                       if (postResponse2.status === 200) {
                         toast.success("Successfully connected!");
+                        router.push('/cluster')
+                        
                       }
                     } catch (error) {
                       console.error("Error making POST request:", error);
@@ -180,11 +185,6 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
             {({ value, setValue }) => (
               <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 mx-2 rounded-md w-1/2">
                 <div className="bg-[#060B28] p-4 rounded-md">
-                  {/* <input
-                        type='text'
-                        value={value}
-                        onChange={e => setValue(e.target.value)}
-                    /> */}
                   <div className="border-2 border-[#2d3150] rounded-lg px-4 py-2 m-2">
                     <div className="text-sm"> Download Docker Desktop</div>
                     <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row justify-between items-center">
@@ -232,14 +232,14 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                     <div>
                       <div className="text-sm">Run Docker Image</div>
                       <CopyToClipboard
-                        text={`docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster:latest`}
+                        text={dockerRunCommand}
                         onCopy={() =>
                           toast.success("Text copied to clipboard!")
                         }
                       >
                         <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
                           <div className="w-3/4 text-xs">
-                            {`docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster:latest`}
+                          {dockerRunCommand}
                           </div>
                           <div className=" p-1">
                             <Copy />
