@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 const NodeStats: React.FC = () => {
-const { data, error } = useSWR('http://65.20.68.31/api/nodes', { refreshInterval: 8000 });
+const { data, error } = useSWR('http://65.20.68.31/api/nodes', { refreshInterval: 1000 });
 
 const [idleCount, setIdleCount] = useState(0);
 const [aliveCount, setAliveCount] = useState(0);
 
 useEffect(() => {
   if (data) {
-    console.log('Summary data:', data?.data?.summary);
     const clusterData = data?.data?.summary;
     if (clusterData) {
       const idleNodes = clusterData.filter((node: any) => node.raylet.state === 'DEAD').length;

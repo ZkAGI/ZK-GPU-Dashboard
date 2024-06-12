@@ -1,8 +1,11 @@
 import { RadialBar } from "@nivo/radial-bar";
-import { CSSProperties } from 'react'
+import { useWallet } from "@solana/wallet-adapter-react";
+import { CSSProperties } from 'react';
+import useSWR from "swr";
 
 const color = "#08ff08";
 const DTI = 0.98;
+//const xp = 145;
 
 const w = 150;
 const h = 150;
@@ -21,36 +24,51 @@ const styles: { [key: string]: CSSProperties } = {
   }
 };
 
-const Metric = ({ center }: { center: number[] }) => {
+const Metric = ({ center, xp }: { center: number[], xp: number }) => {
   return (
-    <text
-      x={center[0]}
-      y={center[0]}
-      textAnchor="middle"
-      dominantBaseline="central"
-      style={{
-        fontSize: 30,
-        fill: "white"
-      }}
-    >
-      {DTI}
-    </text>
+    <>
+      <text
+        x={center[0]}
+        y={center[0]}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{
+          fontSize: 30,
+          fill: "white"
+        }}
+      >
+        {xp}
+      </text>
+      <text
+        x={center[0] +40}
+        y={center[0] +15}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{
+          fontSize: 20,
+          fill: "white"
+        }}
+      >
+        xp
+      </text>
+    </>
   );
 };
 
 export default function TotalEarningChart() {
+  const { wallet } = useWallet();
+  const walletAddress = wallet?.adapter?.publicKey?.toString();
+  const { data, error } = useSWR(`http://65.20.68.31/wallets/${walletAddress}/xp`, { refreshInterval: 8000 });
   return (
     <div className="App">
-      <div  style={styles.root}>
+      <div style={styles.root}>
         <RadialBar
           width={w}
           height={h}
-        //   margin={m}
           valueFormat={"0"}
           maxValue={1}
           startAngle={-140}
           endAngle={60}
-        //   paddingTop={0}
           cornerRadius={40}
           innerRadius={0.80}
           tracksColor="#6f6f6f"
@@ -61,7 +79,25 @@ export default function TotalEarningChart() {
               data: [{ x: "percentage", y: DTI }]
             }
           ]}
-          layers={["tracks", "bars", Metric]}
+          //layers={["tracks", "bars", Metric]}
+          layers={["tracks", "bars", ({ center }) => <Metric center={center} xp={data?.total_points ?? 100} />]}
+          defs={[
+            {
+              id: 'gradientA',
+              type: 'linearGradient',
+              colors: [
+                { offset: 0, color: '#05826e' },
+                { offset: 100, color: '#079e7e' }
+              ]
+            }
+          ]}
+          fill={[
+            {
+              match: '*',
+              id: 'gradientA'
+            }
+          ]}
+          motionConfig="gentle"
         />
       </div>
     </div>
