@@ -63,8 +63,8 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
   const dockerRunCommand = (deviceType === 'gpu')
-    ? `docker run -dit -e "wallet=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster`
-    : `docker run -dit -e "wallet=${walletAddress}" --privileged --network host zkagi/connect2cluster`;
+    ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster`
+    : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host zkagi/connect2cluster`;
 
 
   const handleSubmit = async () => {
