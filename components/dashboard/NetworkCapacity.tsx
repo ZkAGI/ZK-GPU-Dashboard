@@ -4,14 +4,16 @@ import useSWR from "swr";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 interface LeaderboardItem {
-  points: number;
+  total_xp: number;
   wallet_address: string;
 }
 
 const TotalNetworkCapacity: React.FC = () => {
-  const { data, error } = useSWR("https://zynapse.zkagi.ai/xps/all", {
+  const { data, error } = useSWR("https://zynapse.zkagi.ai/leaderboard", {
     refreshInterval: 8000,
   });
+
+  console.log('data',data)
 
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
@@ -37,7 +39,7 @@ const TotalNetworkCapacity: React.FC = () => {
         </div>
         {/* <div className="text-[8px] text-[#B7B3B3]">@username</div> */}
       </div>
-      <div className="col-span-2 text-[#009BD6]">{item.points} xp</div>
+      <div className="col-span-2 text-[#009BD6]">{item.total_xp} xp</div>
       {/* <div className="text-center flex flex-col justify-center items-center">
         <div className="text-xs">197</div>
         <div className="w-3 h-2 bg-[#FF3636] clip-triangle" />
@@ -80,7 +82,7 @@ const TotalNetworkCapacity: React.FC = () => {
                 className={`mb-px`} //text-[${index === 0 ? "#9747FF" : "#009BD6"}]
                 style={{ color: index === 0 ? "#9747FF" : "#009BD6" }}
               >
-                {item.points}
+                {item.total_xp}
               </div>
               <div className="text-[8px] mb-1">
                 @{item.wallet_address.slice(0, 4)}...
