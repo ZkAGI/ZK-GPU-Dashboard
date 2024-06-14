@@ -16,7 +16,7 @@ const CapacityOverview: React.FC = () => {
       setAliveCount(aliveNodes)
 
       data.data.summary.forEach((node: any) => {
-        if (node?.raylet?.resourcesTotal) {
+        if (node?.raylet.state==='ALIVE' && node?.raylet?.resourcesTotal) {
           totalCPU += node.raylet.resourcesTotal.CPU || 0;
           totalGPU += node.raylet.resourcesTotal.GPU || 0;
         }

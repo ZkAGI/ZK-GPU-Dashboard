@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import GPUComponent from "./GPUComponent";
 import Link from "next/link";
-
+import useSWR from "swr";
 
 const Utilization: React.FC = () => {
 
