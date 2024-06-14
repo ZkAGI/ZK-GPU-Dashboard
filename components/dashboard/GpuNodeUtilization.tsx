@@ -1,6 +1,7 @@
 import React from 'react';
 import LineChart, { LineData } from '../graphs/LineChart';
 import UtilizationInfo from './UtilizationInfo';
+import useSWR from 'swr';
 
 const sampleData: LineData[] = [
     {
@@ -16,6 +17,10 @@ const sampleData: LineData[] = [
   ];
 
 const GPUNodesUtilization: React.FC = () => {
+  const { data, error } = useSWR("https://zynapse.zkagi.ai/api/useractivities", {
+    refreshInterval: 8000,
+  });
+  console.log('line',data)
   return (
     <div className="flex flex-col gap-2">  
       <div>GPU Nodes Utilization</div>
