@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
+import useSWR from 'swr';
 
 export interface LineDatum {
   x: string;
