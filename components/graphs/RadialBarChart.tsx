@@ -44,10 +44,7 @@ const Metric = ({ center, value }: { center: number[], value: number }) => {
 export default function RadialBarChart({ aliveCount, gpuCount }: RadialBarChartProps) {
   let DTI = 0;
   if (aliveCount > 0) {
-    console.log('gpuCount',gpuCount)
-    console.log('aliveCount',aliveCount)
     DTI = (gpuCount / aliveCount) * 100;
-    console.log('DTI',DTI)
   }
 
   return (

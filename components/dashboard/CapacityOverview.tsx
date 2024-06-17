@@ -1,32 +1,39 @@
-import { memoryConverter } from '@/utils/memoryConverter';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 const CapacityOverview: React.FC = () => {
-  const {data,error} =useSWR('https://zynapse.zkagi.ai/api/nodes')
+  const { data: nodesData, error: nodesError } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 8000,});
+  const { data: gpuData, error: gpuError } = useSWR('https://zynapse.zkagi.ai/api/dailystats', { refreshInterval: 8000,});
+  
   const [gpuCapacity, setGPUCapacity] = useState<any>(0);
   const [cpuCapacity, setCPUCapacity] = useState<any>(0);
   const [aliveCount, setAliveCount] = useState(0);
 
   useEffect(() => {
-    if (data?.data?.summary) {
+    if (nodesData?.data?.summary) {
       let totalCPU = 0;
-      let totalGPU = 0;
-      const aliveNodes = data?.data?.summary.filter((node: any) => node.raylet.state === 'ALIVE').length;
-      setAliveCount(aliveNodes)
+      const aliveNodes = nodesData?.data?.summary.filter((node: any) => node.raylet.state === 'ALIVE').length;
+      setAliveCount(aliveNodes);
 
-      data.data.summary.forEach((node: any) => {
-        console.log(node)
-        if (node?.raylet.state==='ALIVE' && node?.raylet?.resourcesTotal) {
+      nodesData.data.summary.forEach((node: any) => {
+        if (node?.raylet.state === 'ALIVE' && node?.raylet?.resourcesTotal) {
           totalCPU += node.raylet.resourcesTotal.CPU || 0;
-          totalGPU += node.raylet.resourcesTotal.GPU || 0;
         }
       });
 
       setCPUCapacity(totalCPU);
-      setGPUCapacity(totalGPU);
     }
-  }, [data]);
+  }, [nodesData]);
+
+  useEffect(() => {
+    if (gpuData) {
+      const latestData = gpuData[gpuData.length - 1];
+      if (latestData?.data?.totalGpusMemoryGB) {
+        setGPUCapacity(latestData.data.totalGpusMemoryGB);
+      }
+    }
+  }, [gpuData]);
+
   return (
     <div>
       <div>Total Capacity</div>
@@ -56,3 +63,4 @@ const CapacityOverview: React.FC = () => {
 }
 
 export default CapacityOverview;
+
