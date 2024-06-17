@@ -43,7 +43,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
         reverse: false,
       }}
       curve="basis"
-      enablePoints={true}
+      enablePoints={false}
       enableGridX={false}
       enableGridY={false}
       axisTop={null}

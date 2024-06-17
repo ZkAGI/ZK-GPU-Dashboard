@@ -90,10 +90,17 @@ const TotalNetworkCapacity: React.FC = () => {
           ))}
         </div>
         <div>
-          {userIndex !== -1 &&
+          {/* {userIndex !== -1 &&
             sortedData
               .slice(Math.max(0, userIndex - 1), userIndex + 2)
-              .map(renderLeaderboardItem)}
+              .map(renderLeaderboardItem)} */}
+              {userIndex !== -1 ? (
+            sortedData
+              .slice(Math.max(0, userIndex - 1), userIndex + 2)
+              .map(renderLeaderboardItem)
+          ) : (
+            <div className="p-2 text-center h-24">Contribute your GPU to be on the leaderboard</div>
+          )}
         </div>
         {/* <div>
           {userIndex !== -1 &&
