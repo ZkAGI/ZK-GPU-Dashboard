@@ -7,18 +7,18 @@ import { toast } from "sonner";
 const ReferralTracking: React.FC = () => {
   return (
     <div>
-      <div>Points</div>
-      <div className="bg-[#060B28] rounded-lg p-4 h-72">
-        <div className="grid grid-cols-2">
-          <div className="flex flex-col gap-2">
+      <div>Referral Tracking</div>
+      <div className="bg-[#060B28] rounded-lg p-4 h-64">
+        <div className="flex flex-col">
+          {/* <div className="flex flex-col gap-2">
             <div className="bg-[#171D3D] rounded-lg p-2 px-4 flex flex-col justify-between flex-grow h-40">
               <div className="text-[#A0AEC0] text-sm">Referrals</div>
               <div className="text-right text-5xl">15</div>
             </div>
-            {/* <div className="bg-[#171D3D] rounded-lg w-3/4 p-2 px-4">
+            <div className="bg-[#171D3D] rounded-lg w-3/4 p-2 px-4">
               <div className="text-[#A0AEC0] text-xs">Total Token</div>
               <div className="text-right">1466</div>
-            </div> */}
+            </div>
             <div className="flex flex-col gap-2 justify-center items-center text-center mt-1">
               <CopyToClipboard
                 text="Referal link"
@@ -36,7 +36,7 @@ const ReferralTracking: React.FC = () => {
                 TWEET REFERRAL
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="flex flex-col justify-center items-center">
             <TotalEarningChart />
             <div className="flex justify-end items-end text-[#05B78E]">
