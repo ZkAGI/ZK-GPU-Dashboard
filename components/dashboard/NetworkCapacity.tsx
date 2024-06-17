@@ -18,7 +18,7 @@ const TotalNetworkCapacity: React.FC = () => {
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
-  const sortedData = Array.isArray(data) ? [...data].sort((a, b) => b.points - a.points) : [];
+  const sortedData = Array.isArray(data) ? [...data].sort((a, b) => b. total_xp - a. total_xp) : [];
 
   const userIndex = sortedData.findIndex(
     (item) => item.wallet_address === walletAddress
