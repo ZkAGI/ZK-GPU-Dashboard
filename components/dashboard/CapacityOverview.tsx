@@ -22,17 +22,18 @@ const CapacityOverview: React.FC = () => {
       });
 
       setCPUCapacity(totalCPU);
+      const totalGpuMemory = nodesData?.data?.summary.reduce((totalMemory: number, node: any) => {
+        if (node.raylet.state !== 'DEAD') {
+          return totalMemory + (Array.isArray(node.gpus) ? node.gpus.reduce((gpuTotal: number, gpu: any) => gpuTotal + (gpu?.memoryTotal ? Number(gpu.memoryTotal) / 1024 : 0), 0) : 0);
+        }
+        return totalMemory;
+      }, 0);
+
+      setGPUCapacity(totalGpuMemory);
+      
     }
   }, [nodesData]);
 
-  useEffect(() => {
-    if (gpuData) {
-      const latestData = gpuData[gpuData.length - 1];
-      if (latestData?.data?.totalGpusMemoryGB) {
-        setGPUCapacity(latestData.data.totalGpusMemoryGB);
-      }
-    }
-  }, [gpuData]);
 
   return (
     <div>
