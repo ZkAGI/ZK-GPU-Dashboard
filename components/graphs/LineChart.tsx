@@ -17,6 +17,7 @@ interface LineChartProps {
 }
 
 const LineChart: React.FC<LineChartProps> = ({ data }) => {
+  console.log('datalien',data)
   const maxY = Math.max(...data.flatMap(series => series.data.map(datum => datum.y)));
 
   const generateTickValues = (max: number, step: number): number[] => {
@@ -42,7 +43,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
         reverse: false,
       }}
       curve="basis"
-      enablePoints={false}
+      enablePoints={true}
       enableGridX={false}
       enableGridY={false}
       axisTop={null}
@@ -62,7 +63,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
         legend: 'GPU Nodes',
         legendOffset: -40,
         legendPosition: 'middle',
-        tickValues: generateTickValues(maxY, 5),
+        tickValues: generateTickValues(maxY, 1),
       }}
       theme={{
         axis: {
