@@ -57,6 +57,8 @@ const GPUContribution: React.FC = () => {
     fetchData();
   }, [walletAddress]);
 
+  console.log('list',list)
+
   return (
     <div>
       <div>GPU Contribution</div>
