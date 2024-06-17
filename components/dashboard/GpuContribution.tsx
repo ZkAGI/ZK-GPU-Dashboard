@@ -44,7 +44,6 @@ const GPUContribution: React.FC = () => {
             },
           });
           if (ipResponse.status === 200) {
-            console.log(ipResponse.data);
             setList(ipResponse.data);
           } else {
             setList([]);

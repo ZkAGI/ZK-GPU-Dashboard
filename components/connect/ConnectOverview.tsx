@@ -53,8 +53,6 @@ function RenderSequentially({
   };
   const description = descriptions[os];
 
-  console.log(index, forms[index]);
-
   return (
     <div className="">
       <div className="flex items-center justify-center space-x-4 mb-6 mx-60">
