@@ -29,7 +29,6 @@ const ClusterPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('Summary data:', data?.data?.summary);
       const clusterData = data?.data?.summary.map( (node: any) => {
 
         let totalMemory = 0;
@@ -127,28 +126,10 @@ const ClusterPage: React.FC = () => {
         },
       });
       if (postResponse.status !== 200) {
-        console.log(nodeId);
         console.log('Error in end time');
       }
     } catch (error) {
       console.error('Error while performing PUT request:', error);
-    }
-
-    try {
-      const postResponse2 = await axios({
-        method: "GET",
-        url: `https://zynapse.zkagi.ai/nodes/${nodeId}/active-time`,
-        data: {},
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": "zk-123321",
-        },
-      });
-      if (postResponse2.status !== 200) {
-        console.log(postResponse2);
-      }
-    } catch (error) {
-      console.error('Error fetching status', error);
     }
   };
 
