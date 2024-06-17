@@ -101,7 +101,7 @@ const ClusterPage: React.FC = () => {
           cpu: `${node.cpu}%`,
           memory: `${used}/${total}(${percentage}%)`,
           gpu: `${gpuPercent}%`,
-          gram: `${totalMemory}/${usedMemory}`,
+          gram: `${usedMemory}/${totalMemory}`,
           diskRoot: `${diskUsed}/${diskTotal}(${diskPercentage}%)`,
           sent: `${sentGb}/s`,
           received: `${receivedGb}/s`,
