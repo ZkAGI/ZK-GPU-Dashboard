@@ -30,7 +30,7 @@ const GPUCapacity: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div>GPU Nodes Utilization</div>
+      <div>GPU Capacity Utilization</div>
       <div className="bg-[#060b28] p-2 rounded-md flex flex-col">
         <UtilizationInfo/>
         <div style={{ height: '250px', width: '100', maxHeight: '250px', maxWidth: '100%' }}> 
