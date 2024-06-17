@@ -13,8 +13,6 @@ const TotalNetworkCapacity: React.FC = () => {
     refreshInterval: 8000,
   });
 
-  console.log('data',data)
-
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
