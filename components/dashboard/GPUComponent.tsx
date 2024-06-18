@@ -18,7 +18,7 @@ const GPUComponent: React.FC<GPUComponentProps> = ({ nodeData, gpuName }) => {
   const statusColor = isConnected ? 'text-[#01B574]' : 'text-[#FF0000]';
 
   return (
-    <div className='flex flex-row bg-[#171D3D] p-3 rounded-lg w-60'>
+    <div className='flex flex-row bg-[#171D3D] p-3 rounded-lg lg:w-60 w-3/4'>
       <div className="flex justify-center items-center"><GPU/></div>
       <div>
         <div className='text-xs'>{gpuName}</div>
