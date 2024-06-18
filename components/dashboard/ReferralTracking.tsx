@@ -9,7 +9,7 @@ const ReferralTracking: React.FC = () => {
     <div>
       <div>Referral Tracking</div>
       <div className="bg-[#060B28] rounded-lg p-4 h-64">
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-center items-center">
           {/* <div className="flex flex-col gap-2">
             <div className="bg-[#171D3D] rounded-lg p-2 px-4 flex flex-col justify-between flex-grow h-40">
               <div className="text-[#A0AEC0] text-sm">Referrals</div>

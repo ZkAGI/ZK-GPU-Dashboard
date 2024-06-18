@@ -27,7 +27,7 @@ export default function RootLayout({
             <SidebarRoot>
               <Sidebar />
             </SidebarRoot>
-            <div className="md:pl-[280px]">{children}</div>
+            <div className="md:pl-[280px] xl:pl-[310px]">{children}</div>
           </AppWalletProvider>
         </SWRConfig>
         <Toaster />

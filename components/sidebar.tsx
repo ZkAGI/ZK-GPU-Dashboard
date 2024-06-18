@@ -73,7 +73,7 @@ export function Sidebar() {
         onClick={() => setIsOpen(false)}
       />
 
-      <Drawer.Content className="outline-none bg-transparent flex h-full min-w-[250px] fixed top-0 left-0 rounded-xl pl-3 pt-20 pb-5">
+      <Drawer.Content className="outline-none bg-transparent flex h-full min-w-[250px] max-w-[320px] fixed top-0 left-0 rounded-xl pl-3 pt-20 pb-5">
         <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] flex flex-col w-full rounded-xl">
           <div className="h-full bg-[#0F132C] m-px rounded-xl py-4 flex flex-col justify-between">
             <div className="flex flex-col space-y-1 m-2 ">
@@ -99,7 +99,7 @@ export function Sidebar() {
                 </div>
               </div>
               <div className="flex justify-center items-center z-50">
-                <button className="bg-[#000D33] rounded-lg p-2 w-full text-sm text-white">DOCUMENTATION</button>
+                <a href="https://zkagi.gitbook.io/introduction" className="bg-[#000D33] rounded-lg p-2 w-full text-sm text-center text-white">DOCUMENTATION</a>
               </div>
             </div>
           </div>

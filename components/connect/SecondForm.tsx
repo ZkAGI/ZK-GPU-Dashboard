@@ -36,9 +36,9 @@ export function SecondForm({
                 <br /> the setup will not succeed.
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-20">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-20">
               <div>
-                <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 mx-2 rounded-md w-1/2">
+                <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 mx-2 rounded-md lg:w-1/2">
                   <div className="bg-[#060B28] p-4 rounded-md">
                     <Field name="deviceType">
                       {({ value, setValue }) => (
