@@ -18,7 +18,7 @@ export default function Home() {
   }, [publicKey, router]);
 
   return (
-    <div className="flex flex-col h-full overflow-x-hidden relative mr-4">
+    <div className="flex flex-col h-full overflow-x-hidden relative mr-4 p-2">
       <main className="flex-grow">
         {publicKey ? (
           <div>
