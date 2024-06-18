@@ -24,8 +24,8 @@ const GPUContribution: React.FC = () => {
       try {
         const response = await axios({
           method: 'GET',
-          // url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
-          url: `https://zynapse.zkagi.ai/wallets/6pZV8qDSvNtvg6goqk7RbpzmWyjMsv4wZTFR8EmKfF34/ip_addresses`,
+          url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
+          //url: `https://zynapse.zkagi.ai/wallets/6pZV8qDSvNtvg6goqk7RbpzmWyjMsv4wZTFR8EmKfF34/ip_addresses`,
           headers: {
             'Content-Type': 'application/json',
             'api-key': 'zk-123321',
@@ -34,8 +34,8 @@ const GPUContribution: React.FC = () => {
         if (response.status === 200) {
           const ipResponse = await axios({
             method: 'GET',
-            // url: `https://zynapse.zkagi.ai/ips/${response.data.ip_addresses[0]}/nodes`,
-            url: `https://zynapse.zkagi.ai/ips/10.8.0.98/nodes`,
+            url: `https://zynapse.zkagi.ai/ips/${response.data.ip_addresses[0]}/nodes`,
+            //url: `https://zynapse.zkagi.ai/ips/10.8.0.98/nodes`,
             headers: {
               'Content-Type': 'application/json',
               'api-key': 'zk-123321',
