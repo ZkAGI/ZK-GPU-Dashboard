@@ -104,12 +104,12 @@ export function ConnectOverview() {
     <>
       <RenderSequentially forms={forms[os]} os={os} showForms={showForms} index={index} setIndex={setIndex} setShowForms={setShowForms}/>
       {!showForms && (
-        <div className="mb-20">
+        <div className="mb-20 p-2">
           <div>
             <div className="text-lg">1. Operating System</div>
             <div className="text-xs text-[#5D7285] ml-4">Choose Operating System "OS"</div>
           </div>
-          <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 rounded-md w-1/4">
+          <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 rounded-md md:w-1/4">
           <div className="bg-[#060B28] p-4 rounded-md">
             <div>
               <Radio

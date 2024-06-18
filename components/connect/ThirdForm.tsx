@@ -189,7 +189,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
           </div>
           <Field name="firstName">
             {({ value, setValue }) => (
-              <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 mx-2 rounded-md w-1/2">
+              <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-px my-4 mx-2 rounded-md lg:w-1/2">
                 <div className="bg-[#060B28] p-4 rounded-md">
                   <div className="border-2 border-[#2d3150] rounded-lg px-4 py-2 m-2">
                     <div className="text-sm"> Download Docker Desktop</div>
@@ -244,7 +244,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                         }
                       >
                         <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
-                          <div className="w-3/4 text-xs">
+                          <div className="w-3/4 text-xs overflow-x-clip">
                           {dockerRunCommand}
                           </div>
                           <div className=" p-1">

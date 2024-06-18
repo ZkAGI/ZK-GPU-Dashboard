@@ -68,7 +68,7 @@ const Utilization: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <div>Utilization</div>
-      <div className="bg-[#060b28] p-2 rounded-md flex flex-col">
+      <div className="bg-[#060b28] p-2 rounded-md flex flex-col justify-center itens-center">
         <div className="flex flex-col gap-2 h-48 overflow-y-scroll">
           {sortedNodes.map((node, index) => (
             <GPUComponent key={index} nodeData={node} gpuName={gpuNames[node.node_id]} />

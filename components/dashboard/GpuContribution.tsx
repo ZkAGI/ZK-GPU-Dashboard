@@ -24,7 +24,8 @@ const GPUContribution: React.FC = () => {
       try {
         const response = await axios({
           method: 'GET',
-          url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
+          // url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
+          url: `https://zynapse.zkagi.ai/wallets/6pZV8qDSvNtvg6goqk7RbpzmWyjMsv4wZTFR8EmKfF34/ip_addresses`,
           headers: {
             'Content-Type': 'application/json',
             'api-key': 'zk-123321',
@@ -33,7 +34,8 @@ const GPUContribution: React.FC = () => {
         if (response.status === 200) {
           const ipResponse = await axios({
             method: 'GET',
-            url: `https://zynapse.zkagi.ai/ips/${response.data.ip_addresses[0]}/nodes`,
+            // url: `https://zynapse.zkagi.ai/ips/${response.data.ip_addresses[0]}/nodes`,
+            url: `https://zynapse.zkagi.ai/ips/10.8.0.98/nodes`,
             headers: {
               'Content-Type': 'application/json',
               'api-key': 'zk-123321',
@@ -107,9 +109,11 @@ const GPUContribution: React.FC = () => {
           );
 
           const totalGpuMemory = clusterData.reduce((totalMemory: number, node: any) => {
+            console.log('node',node)
             if (node.ip === selectedIp && node.raylet.state !== 'DEAD') {
               return totalMemory + (Array.isArray(node.gpus) ? node.gpus.reduce((gpuTotal: number, gpu: any) => gpuTotal + (gpu?.memoryTotal ? Number(gpu.memoryTotal) / 1024 : 0), 0) : 0);
             }
+            console.log('totalGpuMemory',totalMemory)
             return totalMemory;
           }, 0);
 
@@ -120,6 +124,8 @@ const GPUContribution: React.FC = () => {
       }
     }
   }, [nodesData, selectedIp]);
+
+  console.log('gpuCount',gpuCount)
 
   return (
     <div>
