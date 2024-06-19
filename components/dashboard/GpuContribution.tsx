@@ -8,13 +8,16 @@ interface Node {
   node_ids: string[];
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const KEY = process.env.API_KEY;
+
 const GPUContribution: React.FC = () => {
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
   const [list, setList] = useState<Node>({ node_ids: [] });
   const [selectedIp, setSelectedIp] = useState<string>('');
-  const { data: nodesData, error: nodesError } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 1000 });
-  const { data: gpuData, error: gpuError } = useSWR('https://zynapse.zkagi.ai/api/dailystats', { refreshInterval: 8000 });
+  const { data: nodesData, error: nodesError } = useSWR(`${BASE_URL}/api/nodes`, { refreshInterval: 1000 });
+  const { data: gpuData, error: gpuError } = useSWR(`${BASE_URL}/api/dailystats`, { refreshInterval: 8000 });
   const [aliveCount, setAliveCount] = useState(0);
   const [gpuCount, setGpuCount] = useState(0);
   const [gpuNames, setGpuNames] = useState<{ [key: string]: string }>({});
@@ -24,21 +27,20 @@ const GPUContribution: React.FC = () => {
       try {
         const response = await axios({
           method: 'GET',
-          url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
-          //url: `https://zynapse.zkagi.ai/wallets/6pZV8qDSvNtvg6goqk7RbpzmWyjMsv4wZTFR8EmKfF34/ip_addresses`,
+          url: `${BASE_URL}/wallets/${walletAddress}/ip_addresses`,
           headers: {
             'Content-Type': 'application/json',
-            'api-key': 'zk-123321',
+            // 'api-key': 'zk-123321',
+            "api-key": `${KEY}`
           },
         });
         if (response.status === 200) {
           const ipResponse = await axios({
             method: 'GET',
-            url: `https://zynapse.zkagi.ai/ips/${response.data.ip_addresses[0]}/nodes`,
-            //url: `https://zynapse.zkagi.ai/ips/10.8.0.98/nodes`,
+            url: `${BASE_URL}/ips/${response.data.ip_addresses[0]}/nodes`,
             headers: {
               'Content-Type': 'application/json',
-              'api-key': 'zk-123321',
+              'api-key': `${KEY}`,
             },
           });
           if (ipResponse.status === 200) {
@@ -47,7 +49,6 @@ const GPUContribution: React.FC = () => {
               return node && node.raylet.state !== 'DEAD';
             });
             setList({ node_ids: filteredNodeIds });
-            console.log('filtered list', filteredNodeIds);
             setSelectedIp(response.data.ip_addresses[0]);
           } else {
             setList({ node_ids: [] });
@@ -89,10 +90,10 @@ const GPUContribution: React.FC = () => {
                 try {
                   const response = await axios({
                     method: 'GET',
-                    url: `https://zynapse.zkagi.ai/nodes/${node.raylet.nodeId}/active-time`,
+                    url: `${BASE_URL}/nodes/${node.raylet.nodeId}/active-time`,
                     headers: {
                       'Content-Type': 'application/json',
-                      'api-key': 'zk-123321',
+                      'api-key': `${KEY}`,
                     },
                   });
                   if (response.status === 200) {
@@ -124,8 +125,6 @@ const GPUContribution: React.FC = () => {
       }
     }
   }, [nodesData, selectedIp]);
-
-  console.log('gpuCount',gpuCount)
 
   return (
     <div>

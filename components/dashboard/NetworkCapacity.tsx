@@ -8,8 +8,9 @@ interface LeaderboardItem {
   wallet_address: string;
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const TotalNetworkCapacity: React.FC = () => {
-  const { data, error } = useSWR("https://zynapse.zkagi.ai/leaderboard", {
+  const { data, error } = useSWR(`${BASE_URL}/leaderboard`, {
     refreshInterval: 8000,
   });
 

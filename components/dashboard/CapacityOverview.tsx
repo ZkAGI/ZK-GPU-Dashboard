@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const CapacityOverview: React.FC = () => {
-  const { data: nodesData, error: nodesError } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 8000,});
-  const { data: gpuData, error: gpuError } = useSWR('https://zynapse.zkagi.ai/api/dailystats', { refreshInterval: 8000,});
+  const { data: nodesData, error: nodesError } = useSWR(`${BASE_URL}/api/nodes`, { refreshInterval: 8000,});
+  const { data: gpuData, error: gpuError } = useSWR(`${BASE_URL}/api/dailystats`, { refreshInterval: 8000,});
   
   const [gpuCapacity, setGPUCapacity] = useState<any>(0);
   const [cpuCapacity, setCPUCapacity] = useState<any>(0);
