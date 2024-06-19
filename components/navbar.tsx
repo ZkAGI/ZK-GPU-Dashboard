@@ -25,7 +25,7 @@ const Navbar = () => {
         </button>
       </div>
       <div className="hidden pointer-events-none gap-10 items-center justify-center md:flex md:pointer-events-auto">
-          <ButtonV1 link="">GET STARTED</ButtonV1>
+          <ButtonV1 link="/connect">GET STARTED</ButtonV1>
           <CustomWalletButton/>
           {/* <WalletMultiButton style={{}}/> */}
           {/* <div className="rounded-full bg-gray-400 size-10 justify-center items-center flex">
