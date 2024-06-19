@@ -5,7 +5,6 @@ import useSWR from "swr";
 
 const color = "#08ff08";
 const DTI = 0.98;
-//const xp = 145;
 
 const w = 150;
 const h = 150;
@@ -56,9 +55,10 @@ const Metric = ({ center, xp }: { center: number[], xp: number }) => {
 };
 
 export default function TotalEarningChart() {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
-  const { data, error } = useSWR(`https://zynapse.zkagi.ai/wallets/${walletAddress}/xp`, { refreshInterval: 8000 });
+  const { data, error } = useSWR(`${BASE_URL}/wallets/${walletAddress}/xp`, { refreshInterval: 8000 });
   return (
     <div className="App">
       <div style={styles.root}>

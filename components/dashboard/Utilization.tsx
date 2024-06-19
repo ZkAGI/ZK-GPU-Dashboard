@@ -14,10 +14,13 @@ interface Gpu {
   name: string;
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const KEY = process.env.API_KEY;
+
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
 const Utilization: React.FC = () => {
-  const { data, error } = useSWR('https://zynapse.zkagi.ai/api/nodes', fetcher, { refreshInterval: 1000 });
+  const { data, error } = useSWR(`${BASE_URL}/api/nodes`, fetcher, { refreshInterval: 1000 });
   const [clustrData, setClustrData] = useState<NodeActiveTimeData[]>([]);
   const [gpuNames, setGpuNames] = useState<{ [key: string]: string }>({});
 
@@ -29,10 +32,11 @@ const Utilization: React.FC = () => {
             try {
               const response = await axios({
                 method: "GET",
-                url: `https://zynapse.zkagi.ai/nodes/${node?.raylet.nodeId}/active-time`,
+                url: `${BASE_URL}/nodes/${node?.raylet.nodeId}/active-time`,
                 headers: {
                   "Content-Type": "application/json",
-                  "api-key": "zk-123321",
+                  //"api-key": "zk-123321",
+                  "api-key": `${KEY}`
                 },
               });
               if (response.status === 200) {
@@ -78,7 +82,7 @@ const Utilization: React.FC = () => {
           <div className="p-2 rounded-lg bg-[#060b28]">
             <Link href="/connect">
               <button
-                className="cursor-pointer bg-gradient-to-r from-[#A4C8FF] via-[#A992ED] to-[#643ADE] bg-clip-text text-transparent"
+                className="cursor-pointer bg-gradient-to-r from-[#A4C8FF] via-[#A992ED] to-[#643ADE] bg-clip-text text-transparent min-w-40"
                 style={{ textShadow: "#A992ED 5px 5px 40px" }}
               >
                 Connect New GPU

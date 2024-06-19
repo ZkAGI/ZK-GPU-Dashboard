@@ -17,8 +17,10 @@ interface EventsData {
   message: string;
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const Events: React.FC = () => {
-  const { data } = useSWR("https://zynapse.zkagi.ai/events", {
+  const { data } = useSWR(`${BASE_URL}/events`, {
     refreshInterval: 1000,
   });
 

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const NodeStats: React.FC = () => {
-const { data, error } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 1000 });
+const { data, error } = useSWR(`${BASE_URL}/api/nodes`, { refreshInterval: 1000 });
 
 const [idleCount, setIdleCount] = useState(0);
 const [aliveCount, setAliveCount] = useState(0);
