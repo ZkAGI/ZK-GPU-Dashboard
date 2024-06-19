@@ -76,7 +76,7 @@ export function Sidebar() {
       <Drawer.Content className="outline-none bg-transparent flex h-full min-w-[250px] max-w-[320px] fixed top-0 left-0 rounded-xl pl-3 pt-20 pb-5">
         <div className="bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] flex flex-col w-full rounded-xl">
           <div className="h-full bg-[#0F132C] m-px rounded-xl py-4 flex flex-col justify-between">
-            <div className="flex flex-col space-y-1 m-2 ">
+            <div className="flex flex-col space-y-1 m-2 flex-grow ">
               {sidebarData.map((item, index) => (
                 <SidebarItem
                   key={index}
@@ -87,9 +87,9 @@ export function Sidebar() {
                 />
               ))}
             </div>
-            <div className="flex flex-col rounded-lg m-2 px-3 py-5 relative">
+            <div className="flex flex-col rounded-lg m-2 px-3 py-5 relative flex-grow">
             <BackgroundNeedHelp />
-              <div className="flex flex-row justify-between mb-5 z-50 text-white mt-2">
+              <div className="flex flex-row justify-between mb-5 z-50 text-white mt-2 bg-">
                 <div className="col-span-3">
                   <h1 className="text-sm">Need Help ?</h1>
                   <h3 className="text-xs font-light">Please check our docs</h3>

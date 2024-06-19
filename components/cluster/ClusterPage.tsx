@@ -17,8 +17,11 @@ interface SummaryItem {
   hostname?: string;
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const KEY = process.env.API_KEY;
+
 const ClusterPage: React.FC = () => {
-  const { data, error } = useSWR('https://zynapse.zkagi.ai/api/nodes', { refreshInterval: 1000 });
+  const { data, error } = useSWR(`${BASE_URL}/api/nodes`, { refreshInterval: 1000 });
   const { clusters, setClusters } = useClusterStore();
 
   const summary: SummaryItem[] | undefined = data?.data?.summary;
@@ -116,13 +119,14 @@ const ClusterPage: React.FC = () => {
     try {
       const postResponse = await axios({
         method: "PUT",
-        url: `https://zynapse.zkagi.ai/nodes/${nodeId}/end-time`,
+        url: `${BASE_URL}/nodes/${nodeId}/end-time`,
         data: {
           "end_time": endTime
         },
         headers: {
           "Content-Type": "application/json",
-          "api-key": "zk-123321",
+          //"api-key": "zk-123321",
+          "api-key": `${KEY}`
         },
       });
       if (postResponse.status !== 200) {

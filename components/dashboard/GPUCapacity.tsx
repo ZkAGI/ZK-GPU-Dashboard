@@ -4,18 +4,10 @@ import { BarData } from '../graphs/types';
 import BarChart from '../graphs/BarGraph';
 import useSWR from 'swr';
 
-  // const barData: BarData[] = [
-  //   { time: "Jan", value: 5 },
-  //   { time: "Feb", value: 12 },
-  //   { time: "Mar", value: 18 },
-  //   { time: "Apr", value: 20 },
-  //   { time: "May", value: 24 },
-  //   { time: "Jun", value: 22 },
-  //   { time: "Aug", value: 18 },
-  // ];
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const GPUCapacity: React.FC = () => {
-  const { data, error } = useSWR("https://zynapse.zkagi.ai/api/dailystats", {
+  const { data, error } = useSWR(`${BASE_URL}/api/dailystats`, {
     refreshInterval: 8000,
   });
 

@@ -10,7 +10,7 @@ import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useConnectStore } from "@/hooks/store/useDeviceStore";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 interface Gpu {
   name?: string;
@@ -24,9 +24,11 @@ interface SummaryItem {
   hostname?: string;
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const KEY = process.env.API_KEY;
 
 export function ThirdForm({ onNext }: { onNext: () => any }) {
-  const { data, error } = useSWR("https://zynapse.zkagi.ai/api/nodes", {
+  const { data, error } = useSWR(`${BASE_URL}/api/nodes`, {
     refreshInterval: 8000,
   });
   const [gpuName, setGpuName] = useState<string | undefined>(undefined);
@@ -62,21 +64,22 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const { publicKey, wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
-  const dockerRunCommand = (deviceType === 'gpu')
-    ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster`
-    : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host zkagi/connect2cluster`;
-
+  const dockerRunCommand =
+    deviceType === "gpu"
+      ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster`
+      : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host zkagi/connect2cluster`;
 
   const handleSubmit = async () => {
     try {
       setIsConnecting(true);
       const response: any = await axios({
         method: "GET",
-        url: `https://zynapse.zkagi.ai/wallets/${walletAddress}/ip_addresses`,
+        url: `${BASE_URL}/wallets/${walletAddress}/ip_addresses`,
         data: {},
         headers: {
           "Content-Type": "application/json",
-          "api-key": "zk-123321",
+          //"api-key": "zk-123321",
+          "api-key": `${KEY}`
         },
       });
       if (response.status === 200) {
@@ -84,11 +87,11 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         {
           data &&
             data?.data?.summary.map(async (node: any) => {
-              if (node?.raylet.state=='ALIVE' && node?.ip === current_ip) {
+              if (node?.raylet.state == "ALIVE" && node?.ip === current_ip) {
                 toast.success("Successfully connected!");
                 setIsConnecting(false);
-                router.push('/cluster')
-                // try {    
+                router.push("/cluster");
+                // try {
                 //   const postResponse = await axios({
                 //     method: "POST",
                 //     url: "http://65.20.68.31/ips",
@@ -150,7 +153,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                 //       });
                 //       if (postResponse2.status === 200) {
                 //         toast.success("Successfully connected!");
-                        
+
                 //       }
                 //     } catch (error) {
                 //       console.error("Error making POST request:", error);
@@ -198,7 +201,12 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                         https://www.docker.com/products/docker-desktop/
                       </div>
                       <div className=" p-1 ">
-                      <a target="_blank" href="https://www.docker.com/products/docker-desktop/"><OpenLink /></a>
+                        <a
+                          target="_blank"
+                          href="https://www.docker.com/products/docker-desktop/"
+                        >
+                          <OpenLink />
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -222,18 +230,28 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       </CopyToClipboard>
                     </div>
                     <div className="mx-10 my-4">
-                    <a target="_blank" href="https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html"><div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
-                        <div>
-                          <OpenLink2 />
+                      <a
+                        target="_blank"
+                        href="https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html"
+                      >
+                        <div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
+                          <div>
+                            <OpenLink2 />
+                          </div>
+                          <div>CUDA Toolkit download and setup</div>
                         </div>
-                        <div>CUDA Toolkit download and setup</div>
-                      </div></a>
-                      <a target="_blank" href="https://www.nvidia.com/Download/index.aspx"><div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
-                        <div>
-                          <OpenLink2 />
+                      </a>
+                      <a
+                        target="_blank"
+                        href="https://www.nvidia.com/Download/index.aspx"
+                      >
+                        <div className="text-[#0075FF] text-xs flex flex-row gap-1 items-center">
+                          <div>
+                            <OpenLink2 />
+                          </div>
+                          <div>Nvidia Drivers Installation</div>
                         </div>
-                        <div>Nvidia Drivers Installation</div>
-                      </div></a>
+                      </a>
                     </div>
                     <div>
                       <div className="text-sm">Run Docker Image</div>
@@ -245,7 +263,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                       >
                         <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
                           <div className="w-3/4 text-xs overflow-x-clip">
-                          {dockerRunCommand}
+                            {dockerRunCommand}
                           </div>
                           <div className=" p-1">
                             <Copy />
@@ -264,13 +282,13 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
               {/* <ButtonV2>
                 <button>CONNECT</button>
               </ButtonV2> */}
-               {isConnecting ? (
-              <div>Connecting...</div> 
-            ) : (
-              <ButtonV2>
-                <button>CONNECT</button>
-              </ButtonV2>
-            )}
+              {isConnecting ? (
+                <div>Connecting...</div>
+              ) : (
+                <ButtonV2>
+                  <button>CONNECT</button>
+                </ButtonV2>
+              )}
             </div>
           </div>
         </form>
