@@ -24,6 +24,13 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
     return values;
   };
 
+  const CustomTooltip = ({ id, value, indexValue }: any) => (
+    <div style={{ background: 'rgba(0, 0, 0, 0.75)', color: 'white', padding: '9px 12px', borderRadius: '7px' }}>
+      <strong>Time: {indexValue}</strong><br />
+      GPU Capacity: {Math.floor(value)}
+    </div>
+  );
+
   return (
     <ResponsiveBar
       data={data}
@@ -53,7 +60,7 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
         legend: 'GPU Capacity',
         legendPosition: 'middle',
         legendOffset: -40,
-        tickValues: generateTickValues(maxY, 2),
+        tickValues: generateTickValues(maxY, 5),
       }}
       labelSkipWidth={12}
       labelSkipHeight={12}
@@ -82,6 +89,7 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
       role="application"
       ariaLabel="Nivo bar chart demo"
       barAriaLabel={(e: any) => `${e.id}: ${e.formattedValue} in time: ${e.indexValue}`}
+      tooltip={CustomTooltip}
     />
   );
 };
