@@ -16,7 +16,7 @@ const GPUCapacity: React.FC = () => {
 
     return data.map((entry: { date: string, data: { totalGpusMemoryGB: number } }) => ({
       time: entry.date,
-      value: entry.data.totalGpusMemoryGB,
+      value: Math.floor(entry.data.totalGpusMemoryGB),
     }));
   }, [data]);
 
