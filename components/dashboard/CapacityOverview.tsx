@@ -31,7 +31,7 @@ const CapacityOverview: React.FC = () => {
         return totalMemory;
       }, 0);
 
-      setGPUCapacity(totalGpuMemory);
+      setGPUCapacity(Math.floor(totalGpuMemory));
       
     }
   }, [nodesData]);

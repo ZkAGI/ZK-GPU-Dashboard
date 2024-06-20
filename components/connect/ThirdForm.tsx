@@ -78,9 +78,8 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         data: {},
         headers: {
           "Content-Type": "application/json",
-          //"api-key": "zk-123321",
           "api-key": `${KEY}`
-        },
+        },        
       });
       if (response.status === 200) {
         const current_ip = response.data.ip_addresses[0];

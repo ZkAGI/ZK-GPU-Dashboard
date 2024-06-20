@@ -22,7 +22,7 @@ useEffect(() => {
 }, [data]);
   
   return (
-    <div className=" flex flex-col gap-2 lg:grid lg:grid-cols-3 lg:justify-between lg:gap-6 lg:gap-2 lg:w-5/12 mb-5">
+    <div className=" flex flex-col gap-2 lg:grid lg:grid-cols-3 lg:justify-between lg:gap-6 lg:w-5/12 mb-5">
       <div className="border flex flex-row justify-around items-center p-2 rounded-lg">
         <div className="text-sm">TOTAL</div>
         <div className="text-3xl">{aliveCount+idleCount}</div>

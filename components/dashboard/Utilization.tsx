@@ -35,7 +35,6 @@ const Utilization: React.FC = () => {
                 url: `${BASE_URL}/nodes/${node?.raylet.nodeId}/active-time`,
                 headers: {
                   "Content-Type": "application/json",
-                  //"api-key": "zk-123321",
                   "api-key": `${KEY}`
                 },
               });
