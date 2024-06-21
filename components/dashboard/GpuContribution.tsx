@@ -126,6 +126,9 @@ const GPUContribution: React.FC = () => {
     }
   }, [nodesData, selectedIp]);
 
+  console.log('aliveCount',aliveCount)
+  console.log('gpuCount',gpuCount)
+
   return (
     <div>
       <div>GPU Contribution</div>
