@@ -74,7 +74,7 @@ const GPUContribution: React.FC = () => {
           return totalMemory;
         }, 0);
 
-        setAliveCount(totalGpuMemory);
+        setAliveCount(Math.floor(totalGpuMemory));
       }
     }
   }, [nodesData]);
@@ -110,11 +110,9 @@ const GPUContribution: React.FC = () => {
           );
 
           const totalGpuMemory = clusterData.reduce((totalMemory: number, node: any) => {
-            console.log('node',node)
             if (node.ip === selectedIp && node.raylet.state !== 'DEAD') {
               return totalMemory + (Array.isArray(node.gpus) ? node.gpus.reduce((gpuTotal: number, gpu: any) => gpuTotal + (gpu?.memoryTotal ? Number(gpu.memoryTotal) / 1024 : 0), 0) : 0);
             }
-            console.log('totalGpuMemory',totalMemory)
             return totalMemory;
           }, 0);
 
@@ -125,9 +123,6 @@ const GPUContribution: React.FC = () => {
       }
     }
   }, [nodesData, selectedIp]);
-
-  console.log('aliveCount',aliveCount)
-  console.log('gpuCount',gpuCount)
 
   return (
     <div>
