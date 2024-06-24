@@ -12,8 +12,20 @@ interface BarChartProps {
   data: BarData[];
 }
 
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  return `${day}/${month}`;
+};
+
 const BarChart: React.FC<BarChartProps> = ({ data }) => {
-  const maxY = Math.max(...data.map(datum => datum.value));
+  const formattedData = data.map(datum => ({
+    ...datum,
+    time: formatDate(datum.time),
+  }));
+
+  const maxY = Math.max(...formattedData.map(datum => datum.value));
 
   const generateTickValues = (max: number, step: number): number[] => {
     const maxAdjusted = Math.ceil(max / step) * step;
@@ -33,11 +45,11 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
 
   return (
     <ResponsiveBar
-      data={data}
+      data={formattedData}
       keys={['value']}
       indexBy="time"
       margin={{ top: 50, right: 50, bottom: 50, left: 70 }}
-      padding={0.8}
+      padding={0.8} 
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}
       colors="#FFFFFF"
@@ -60,7 +72,7 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
         legend: 'GPU Capacity',
         legendPosition: 'middle',
         legendOffset: -40,
-        tickValues: generateTickValues(maxY, 5),
+        tickValues: generateTickValues(maxY, 10),
       }}
       labelSkipWidth={12}
       labelSkipHeight={12}
