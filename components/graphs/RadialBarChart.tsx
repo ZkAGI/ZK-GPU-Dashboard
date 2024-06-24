@@ -45,7 +45,6 @@ export default function RadialBarChart({ aliveCount, gpuCount }: RadialBarChartP
   let DTI = 0;
   if (aliveCount > 0) {
     DTI = parseFloat(((gpuCount / aliveCount) * 100).toFixed(2));
-    console.log(DTI)
   }
 
   return (
