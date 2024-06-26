@@ -10,6 +10,7 @@ export interface BarData extends CustomBarDatum {
 
 interface BarChartProps {
   data: BarData[];
+  filter: 'day' | 'week' | 'month';
 }
 
 const formatDate = (dateString: string) => {
@@ -19,10 +20,10 @@ const formatDate = (dateString: string) => {
   return `${day}/${month}`;
 };
 
-const BarChart: React.FC<BarChartProps> = ({ data }) => {
+const BarChart: React.FC<BarChartProps> = ({ data, filter }) => {
   const formattedData = data.map(datum => ({
     ...datum,
-    time: formatDate(datum.time),
+    time: datum.time.includes('/') ? datum.time : formatDate(datum.time),
   }));
 
   const maxY = Math.max(...formattedData.map(datum => datum.value));
@@ -43,12 +44,14 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
     </div>
   );
 
+  const axisBottomLegend = filter === 'day' ? 'Time in Days' : filter === 'week' ? 'Time in Week' : 'Time in Months';
+
   return (
     <ResponsiveBar
       data={formattedData}
       keys={['value']}
       indexBy="time"
-      margin={{ top: 50, right: 50, bottom: 50, left: 70 }}
+      margin={{ top: 30, right: 50, bottom: 50, left: 70 }}
       padding={0.8} 
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}
@@ -61,7 +64,7 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
         tickSize: 0,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'Time',
+        legend: axisBottomLegend,
         legendPosition: 'middle',
         legendOffset: 42,
       }}
@@ -107,3 +110,4 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
 };
 
 export default BarChart;
+

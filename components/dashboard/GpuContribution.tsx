@@ -30,7 +30,6 @@ const GPUContribution: React.FC = () => {
           url: `${BASE_URL}/wallets/${walletAddress}/ip_addresses`,
           headers: {
             'Content-Type': 'application/json',
-            // 'api-key': 'zk-123321',
             "api-key": `${KEY}`
           },
         });
