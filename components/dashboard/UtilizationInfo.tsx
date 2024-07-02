@@ -46,7 +46,7 @@ const UtilizationInfo: React.FC<UtilizationInfoProps> = ({ filter, setFilter, da
         <div
           onClick={() => setFilter('day')}
           className={`bg-[#1E2056] px-2 py-1 text-center rounded text-xs cursor-pointer ${
-            filter === 'day' ? 'bg-[#0075FF] text-white' : 'bg-[#1E2056]'
+            filter === 'day' ? 'bg-blue-600 text-white' : 'bg-[#1E2056]'
           }`}
         >
           Day
@@ -54,7 +54,7 @@ const UtilizationInfo: React.FC<UtilizationInfoProps> = ({ filter, setFilter, da
         <div
           onClick={() => setFilter('week')}
           className={`bg-[#1E2056] px-2 py-1 text-center rounded text-xs cursor-pointer ${
-            filter === 'week' ? 'bg-[#0075FF] text-white' : 'bg-[#1E2056]'
+            filter === 'week' ? 'bg-blue-600 text-white' : 'bg-[#1E2056]'
           }`}
         >
           Week
@@ -62,7 +62,7 @@ const UtilizationInfo: React.FC<UtilizationInfoProps> = ({ filter, setFilter, da
         <div
           onClick={() => setFilter('month')}
           className={`bg-[#1E2056] px-2 py-1 text-center rounded text-xs cursor-pointer ${
-            filter === 'month' ? 'bg-[#0075FF] text-white' : 'bg-[#1E2056]'
+            filter === 'month' ? 'bg-blue-600 text-white' : 'bg-[#1E2056]'
           }`}
         >
           Month
@@ -73,3 +73,4 @@ const UtilizationInfo: React.FC<UtilizationInfoProps> = ({ filter, setFilter, da
 }
 
 export default UtilizationInfo;
+
