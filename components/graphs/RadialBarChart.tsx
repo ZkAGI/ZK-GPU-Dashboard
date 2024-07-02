@@ -46,7 +46,7 @@ export default function RadialBarChart({ aliveCount, gpuCount }: RadialBarChartP
   if (aliveCount > 0) {
     console.log('aliveCount',aliveCount)
     console.log('gpuCount',gpuCount)
-    DTI = parseFloat(((gpuCount / aliveCount) * 100).toFixed(2));
+    DTI = parseFloat(((Math.floor(gpuCount) / aliveCount) * 100).toFixed(2));
     console.log('DTI',DTI)
   }
 
