@@ -77,7 +77,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, filter }) => {
       axisRight={null}
       axisBottom={{
         tickSize: 0,
-        tickPadding: 5,
+        tickPadding: 10,
         tickRotation: 0,
         legend: getLegend(),
         legendOffset: 40,
@@ -85,10 +85,10 @@ const LineChart: React.FC<LineChartProps> = ({ data, filter }) => {
       }}
       axisLeft={{
         tickSize: 0,
-        tickPadding: 5,
+        tickPadding: 30,
         tickRotation: 0,
         legend: 'GPU Nodes',
-        legendOffset: -40,
+        legendOffset: -52,
         legendPosition: 'middle',
         tickValues: generateTickValues(maxY, 2),
       }}
