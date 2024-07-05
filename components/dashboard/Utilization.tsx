@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import GPUComponent from "./GPUComponent";
-import Link from "next/link";
 import useSWR from "swr";
 import axios from "axios";
+import { useWhitelistCheck } from "@/hooks/useWhitelistCheck";
 
 interface NodeActiveTimeData {
   active_time: string;
@@ -23,6 +23,7 @@ const Utilization: React.FC = () => {
   const { data, error } = useSWR(`${BASE_URL}/api/nodes`, fetcher, { refreshInterval: 1000 });
   const [clustrData, setClustrData] = useState<NodeActiveTimeData[]>([]);
   const [gpuNames, setGpuNames] = useState<{ [key: string]: string }>({});
+  const { checkWhitelistAndRedirect, isLoading } = useWhitelistCheck();
 
   useEffect(() => {
     if (data) {
@@ -70,27 +71,27 @@ const Utilization: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div>Utilization</div>
-      <div className="bg-[#060b28] p-2 rounded-md flex flex-col justify-center itens-center">
-        <div className="flex flex-col gap-2 h-48 overflow-y-scroll">
-          {sortedNodes.map((node, index) => (
-            <GPUComponent key={index} nodeData={node} gpuName={gpuNames[node.node_id]} />
-          ))}
-        </div>
-        <div className="flex justify-center items-center bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-0.5 w-fit rounded-lg mx-12 my-6">
-          <div className="p-2 rounded-lg bg-[#060b28]">
-            <Link href="/connect">
-              <button
-                className="cursor-pointer bg-gradient-to-r from-[#A4C8FF] via-[#A992ED] to-[#643ADE] bg-clip-text text-transparent min-w-40"
-                style={{ textShadow: "#A992ED 5px 5px 40px" }}
-              >
-                Connect New GPU
-              </button>
-            </Link>
-          </div>
+    <div>Utilization</div>
+    <div className="bg-[#060b28] p-2 rounded-md flex flex-col justify-center itens-center">
+      <div className="flex flex-col gap-2 h-48 overflow-y-scroll">
+        {sortedNodes.map((node, index) => (
+          <GPUComponent key={index} nodeData={node} gpuName={gpuNames[node.node_id]} />
+        ))}
+      </div>
+      <div className="flex justify-center items-center bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-0.5 w-fit rounded-lg mx-12 my-6">
+        <div className="p-2 rounded-lg bg-[#060b28]">
+          <button
+            onClick={checkWhitelistAndRedirect}
+            disabled={isLoading}
+            className="cursor-pointer bg-gradient-to-r from-[#A4C8FF] via-[#A992ED] to-[#643ADE] bg-clip-text text-transparent min-w-40"
+            style={{ textShadow: "#A992ED 5px 5px 40px" }}
+          >
+            {isLoading ? 'Checking...' : 'Connect New GPU'}
+          </button>
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
