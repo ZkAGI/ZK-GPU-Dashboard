@@ -10,10 +10,6 @@ import GPUNodesUtilization from "@/components/dashboard/GpuNodeUtilization";
 import GPUCapacity from "@/components/dashboard/GPUCapacity";
 import Utilization from "@/components/dashboard/Utilization";
 import Events from "@/components/dashboard/Events";
-import { Illustration } from "../components/icons/Illustration";
-import { useEffect, useState } from "react";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-
 
 export default function Home() {
   const { connection } = useConnection();
