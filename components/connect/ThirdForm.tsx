@@ -80,11 +80,6 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
       ? "docker pull zkagi/connect2cluster:latest"
       : "docker pull zkagi/connectpublic2cluster:latest";
 
-  // const dockerRunCommand =
-  //   deviceType === "gpu"
-  //     ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all --hostname ${deviceName} zkagi/connect2cluster`
-  //     : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --hostname ${deviceName} zkagi/connect2cluster`;
-
   const handleSubmit = async () => {
     try {
       setIsConnecting(true);
