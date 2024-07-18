@@ -1,14 +1,20 @@
 "use client";
 
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ClusterOverview from "@/components/cluster/ClusterOverview";
 import { ConnectOverview } from "@/components/connect/ConnectOverview";
+import { useFormStore } from "@/hooks/store/useConnectStore";
+import { Edit } from "@/components/icons/Edit";
+import { Save } from "@/components/icons/Save";
 
 export default function Home() {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
+  const [isEditing, setIsEditing] = useState(false);
+  const [newDeviceName, setNewDeviceName] = useState("");
+  const { deviceName, setDeviceName } = useFormStore();
   const router = useRouter(); 
 
   useEffect(() => {
@@ -17,13 +23,49 @@ export default function Home() {
     }
   }, [publicKey, router]);
 
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setNewDeviceName(deviceName);
+  };
+
+  const handleSaveClick = () => {
+    setDeviceName(newDeviceName);
+    setIsEditing(false);
+  };
+
   return (
     <div className="flex flex-col h-full overflow-x-hidden relative mr-4 p-2">
       <main className="flex-grow">
         {publicKey ? (
           <div>
             <div className="text-2xl">Connect New Device</div>
-            <div className="p-4"> New Device</div>
+            <div className="text-lg flex items-center">
+              {isEditing ? (
+                <>
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      value={newDeviceName}
+                      onChange={(e) => setNewDeviceName(e.target.value)}
+                      className="bg-[#171D3D] p-1 text-white pr-8"
+                    />
+                    <button 
+                      onClick={handleSaveClick} 
+                      className="absolute right-0 text-green-500"
+                    >
+                      <Save />
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button onClick={handleEditClick} className="ml-4 mr-2 text-gray-400 py-2">
+                    <Edit />
+                  </button>
+                  {deviceName}
+                </>
+              )}
+            </div>
             <div className="w-3/4 px-4 font-thin text-sm">Follow the steps below to connect your device. If you require assistance in connecting your device to the ZkAGI network, please reach out to our support team.</div>
             <div className="border border-[#ffffff1b] mx-4 my-2"></div>
            <ConnectOverview/>
