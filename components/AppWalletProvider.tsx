@@ -8,7 +8,7 @@ import {
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
- import { PhantomWalletAdapter, } from "@solana/wallet-adapter-wallets";
+ import { PhantomWalletAdapter,SolflareWalletAdapter, CoinbaseWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
  
@@ -22,6 +22,8 @@ export default function AppWalletProvider({
     const wallets = useMemo(
       () => [
         new PhantomWalletAdapter(),
+        new SolflareWalletAdapter(),
+        new CoinbaseWalletAdapter()
       ],
       [network],
     );
