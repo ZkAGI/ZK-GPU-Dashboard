@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useConnectStore } from "@/hooks/store/useDeviceStore";
 import { useRouter } from "next/navigation";
+import { useFormStore } from "@/hooks/store/useConnectStore";
 
 interface Gpu {
   name?: string;
@@ -39,9 +40,10 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const [start, setStart] = useState<any>(undefined);
   const [diskTotal, setDiskTotal] = useState<any>(undefined);
   const [textToCopy, setTextToCopy] = useState("");
-  const { deviceType } = useConnectStore();
+  const { deviceType, serviceType } = useConnectStore();
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
+  const { deviceName } = useFormStore();
 
   useEffect(() => {
     const summary: SummaryItem[] | undefined = data?.data?.summary;
@@ -65,9 +67,23 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
   const dockerRunCommand =
-    deviceType === "gpu"
-      ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all zkagi/connect2cluster`
-      : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host zkagi/connect2cluster`;
+    serviceType === "local"
+      ? deviceType === "gpu"
+        ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all --hostname ${deviceName} zkagi/connect2cluster`
+        : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --hostname ${deviceName} zkagi/connect2cluster`
+      : deviceType === "gpu"
+      ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all --hostname ${deviceName} zkagi/connectpublic2cluster`
+      : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --hostname ${deviceName} zkagi/connectpublic2cluster`;
+
+  const dockerPullCommand =
+    serviceType === "local"
+      ? "docker pull zkagi/connect2cluster:latest"
+      : "docker pull zkagi/connectpublic2cluster:latest";
+
+  // const dockerRunCommand =
+  //   deviceType === "gpu"
+  //     ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all --hostname ${deviceName} zkagi/connect2cluster`
+  //     : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --hostname ${deviceName} zkagi/connect2cluster`;
 
   const handleSubmit = async () => {
     try {
@@ -78,8 +94,8 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         data: {},
         headers: {
           "Content-Type": "application/json",
-          "api-key": `${KEY}`
-        },        
+          "api-key": `${KEY}`,
+        },
       });
       if (response.status === 200) {
         const current_ip = response.data.ip_addresses[0];
@@ -213,15 +229,13 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                     <div>
                       <div className="text-sm">Download Docker Image</div>
                       <CopyToClipboard
-                        text="docker pull zkagi/connect2cluster:latest"
+                        text={dockerPullCommand}
                         onCopy={() =>
                           toast.success("Text copied to clipboard!")
                         }
                       >
                         <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row justify-between items-center">
-                          <div className="text-xs">
-                            docker pull zkagi/connect2cluster:latest
-                          </div>
+                          <div className="text-xs">{dockerPullCommand}</div>
                           <div className="p-1">
                             <Copy />
                           </div>

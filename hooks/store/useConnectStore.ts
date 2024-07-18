@@ -6,9 +6,11 @@ interface FormState {
     macStepIndex: number;
     ubuntuStepIndex: number;
     formValues: any;
+    deviceName: string;
     setOs:(os: 'windows' | 'mac' | 'ubuntu')=>void
     setFormValues:(values: any)=>void
     setWindowsStepIndex:(index: number)=>void
+    setDeviceName: (name: string) => void;
   }
   
   export const useFormStore = create<FormState>((set) => ({
@@ -17,6 +19,7 @@ interface FormState {
     macStepIndex: 0,
     ubuntuStepIndex: 0,
     formValues: {},
+    deviceName: 'New-Device',
     setOs: (os: 'windows' | 'mac' | 'ubuntu') =>
       set((state) => ({
         os,
@@ -30,4 +33,5 @@ interface FormState {
     setUbuntuStepIndex: (index: number) =>
       set((state) => ({ ubuntuStepIndex: index })),
     setFormValues: (values: any) => set((state) => ({ formValues: values })),
+    setDeviceName: (name: string) => set((state) => ({ deviceName: name })),
   }));
