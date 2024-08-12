@@ -40,7 +40,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const [start, setStart] = useState<any>(undefined);
   const [diskTotal, setDiskTotal] = useState<any>(undefined);
   const [textToCopy, setTextToCopy] = useState("");
-  const { deviceType, serviceType } = useConnectStore();
+  const { deviceType, serviceType, publicNodeIP } = useConnectStore();
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
   const { deviceName } = useFormStore();
@@ -72,13 +72,13 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
         ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all --hostname ${deviceName} zkagi/connect2cluster`
         : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --hostname ${deviceName} zkagi/connect2cluster`
       : deviceType === "gpu"
-      ? `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --gpus all --hostname ${deviceName} zkagi/connectpublic2cluster`
-      : `docker run -dit -e "walletAddress=${walletAddress}" --privileged --network host --hostname ${deviceName} zkagi/connectpublic2cluster`;
+      ? `docker run -dit --gpus all -e "walletAddress=${walletAddress}" -e "nodeIP=${publicNodeIP}" --privileged --network host --hostname ${deviceName} zkagi/connectcloud2cluster`
+      : `docker run -dit -e "walletAddress=${walletAddress}" -e "nodeIP=${publicNodeIP}" --privileged --network host --hostname ${deviceName} zkagi/connectcloud2cluster`;
 
   const dockerPullCommand =
     serviceType === "local"
       ? "docker pull zkagi/connect2cluster:latest"
-      : "docker pull zkagi/connectpublic2cluster:latest";
+      : "docker pull zkagi/connectcloud2cluster:latest";
 
   const handleSubmit = async () => {
     try {
@@ -270,7 +270,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                         }
                       >
                         <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
-                          <div className="w-3/4 text-xs overflow-x-clip">
+                          <div className="w-3/4 text-xs overflow-x-scroll">
                             {dockerRunCommand}
                           </div>
                           <div className=" p-1">

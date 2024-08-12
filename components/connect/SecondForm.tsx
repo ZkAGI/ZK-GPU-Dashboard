@@ -4,6 +4,8 @@ import { ButtonV2 } from "../buttonV2";
 import { useConnectStore } from "@/hooks/store/useDeviceStore";
 import { gpuNames } from "@/data/gpuNames";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { Save } from "@/components/icons/Save";
 
 export function SecondForm({
   title,
@@ -12,9 +14,10 @@ export function SecondForm({
   title: string;
   onNext: () => any;
 }) {
-  const { deviceType, setDeviceType, serviceType, setServiceType } =
-    useConnectStore();
+  const { deviceType, setDeviceType, serviceType, setServiceType, publicNodeIP, setPublicNodeIP, } = useConnectStore();
   const [searchTerm, setSearchTerm] = useState("");
+  const [ip, setIp] = useState("");
+  const [check, setCheck] = useState("");
 
   useEffect(() => {
     if (!serviceType) {
@@ -26,6 +29,27 @@ export function SecondForm({
     name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIp(e.target.value);
+  };
+
+  const handleSaveIp = () => {
+    if (ip) {
+      setPublicNodeIP(ip);
+      toast.success("Public Node IP saved successfully!");
+    } else {
+      toast.error("Please enter a valid IP address.");
+    }
+  };
+
+  const handleNext = () => {
+    if (serviceType === "cloud" && !publicNodeIP) {
+      toast.error("Please add an IP address before proceeding.");
+    } else {
+      onNext(); 
+    }
+  };
+
   return (
     <div>
       <Form onSubmit={onNext}>
@@ -33,7 +57,7 @@ export function SecondForm({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              isValid && submit();
+              isValid && handleNext();
             }}
             className="flex flex-col"
           >
@@ -50,7 +74,7 @@ export function SecondForm({
                           Use your local PC for connecting to the CPU/GPU or use
                           an online service like AWS, GCP, Azure, etc
                         </div>
-                       <div className="bg-gradient-to-tr from-[#000D33] p-0.5 via-[#9A9A9A] to-[#000D33]  rounded w-fit mb-8 mt-2 ml-4">
+                       <div className="bg-gradient-to-tr from-[#000D33] p-0.5 via-[#9A9A9A] to-[#000D33]  rounded w-fit mb-2 mt-2 ml-4">
                 
                         <div className="grid grid-cols-2 rounded  bg-[#060b28] p-2">
                           <div
@@ -71,6 +95,7 @@ export function SecondForm({
                                 onClick={() => {
                                   setValue("local");
                                   setServiceType("local");
+                                  setCheck("local")
                                 }}
                               >
                                 Local PC
@@ -95,6 +120,7 @@ export function SecondForm({
                                 onClick={() => {
                                   setValue("cloud");
                                   setServiceType("cloud");
+                                  setCheck("cloud")
                                 }}
                               >
                                 Cloud Services
@@ -107,6 +133,32 @@ export function SecondForm({
                       </div>
                     )}
                   </Field>
+
+                  {check === "cloud"  && (
+                    <div className="ml-4 mb-4">
+                      <div className="text-xs text-[#5D7285] mb-1">Type your Public Node IP address</div>
+                      <div className="bg-gradient-to-tr from-[#000D33] p-0.5 via-[#9A9A9A] to-[#000D33]  rounded w-7/12">
+                      <div className="bg-[#060C2D] w-full flex justify-between rounded">
+                      <input
+                        type="text"
+                        value={ip}
+                        onChange={handleIpChange}
+                        placeholder="192.0.0.0"
+                        className="bg-[#060C2D] text-[#77FFCE] p-2 rounded-md"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSaveIp}
+                        className="bg-[#060C2D] text-[#1c1f2b] px-4 py-2 rounded-md"
+                      >
+                        <Save/>
+                      </button>
+                      </div>
+                      </div>
+                    </div>
+                  )}
+
+
                   <div className="text-xs text-[#5D7285] ml-4">
                     If you opt for the GPU Worker but your device lacks a GPU,
                     <br /> the setup will not succeed.
@@ -143,7 +195,7 @@ export function SecondForm({
 
                     <div className="flex justify-end mt-4">
                       <ButtonV2>
-                        <button>NEXT STEP</button>
+                        <button type="submit" disabled={serviceType === "cloud" && !publicNodeIP}>NEXT STEP</button>
                       </ButtonV2>
                     </div>
                   </div>
