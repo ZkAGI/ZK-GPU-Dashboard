@@ -14,7 +14,14 @@ export function SecondForm({
   title: string;
   onNext: () => any;
 }) {
-  const { deviceType, setDeviceType, serviceType, setServiceType, publicNodeIP, setPublicNodeIP, } = useConnectStore();
+  const {
+    deviceType,
+    setDeviceType,
+    serviceType,
+    setServiceType,
+    publicNodeIP,
+    setPublicNodeIP,
+  } = useConnectStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [ip, setIp] = useState("");
   const [check, setCheck] = useState("");
@@ -43,10 +50,10 @@ export function SecondForm({
   };
 
   const handleNext = () => {
-    if (serviceType === "cloud" && !publicNodeIP) {
+    if (check === "cloud" && !ip) {
       toast.error("Please add an IP address before proceeding.");
     } else {
-      onNext(); 
+      onNext();
     }
   };
 
@@ -74,90 +81,89 @@ export function SecondForm({
                           Use your local PC for connecting to the CPU/GPU or use
                           an online service like AWS, GCP, Azure, etc
                         </div>
-                       <div className="bg-gradient-to-tr from-[#000D33] p-0.5 via-[#9A9A9A] to-[#000D33]  rounded w-fit mb-2 mt-2 ml-4">
-                
-                        <div className="grid grid-cols-2 rounded  bg-[#060b28] p-2">
-                          <div
-                            className={`${
-                              value === "local"
-                                ? "bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-0.5 rounded text-center shadow-md shadow-[#3c2693]"
-                                : null
-                            }`}
-                          >
-                            <div className=" bg-[#060b28] rounded">
-                              <button
-                                type="button"
-                                className={`w-full py-2 rounded uppercase text-xs ${
-                                  value === "local"
-                                    ? " text-[#77FFCE] bg-[#171D3D]"
-                                    : "font-semibold text-[#52566f]"
-                                }`}
-                                onClick={() => {
-                                  setValue("local");
-                                  setServiceType("local");
-                                  setCheck("local")
-                                }}
-                              >
-                                Local PC
-                              </button>
+                        <div className="bg-gradient-to-tr from-[#000D33] p-0.5 via-[#9A9A9A] to-[#000D33]  rounded w-fit mb-2 mt-2 ml-4">
+                          <div className="grid grid-cols-2 rounded  bg-[#060b28] p-2">
+                            <div
+                              className={`${
+                                value === "local"
+                                  ? "bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-0.5 rounded text-center shadow-md shadow-[#3c2693]"
+                                  : null
+                              }`}
+                            >
+                              <div className=" bg-[#060b28] rounded">
+                                <button
+                                  type="button"
+                                  className={`w-full py-2 rounded uppercase text-xs ${
+                                    value === "local"
+                                      ? " text-[#77FFCE] bg-[#171D3D]"
+                                      : "font-semibold text-[#52566f]"
+                                  }`}
+                                  onClick={() => {
+                                    setValue("local");
+                                    setServiceType("local");
+                                    setCheck("local");
+                                  }}
+                                >
+                                  Local PC
+                                </button>
+                              </div>
+                            </div>
+                            <div
+                              className={`${
+                                value === "cloud"
+                                  ? "bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-0.5 rounded text-center shadow-md shadow-[#3c2693]"
+                                  : null
+                              }`}
+                            >
+                              <div className="bg-[#060b28] rounded">
+                                <button
+                                  type="button"
+                                  className={`px-4 py-2 rounded uppercase text-xs ${
+                                    value === "cloud"
+                                      ? " text-[#77FFCE] bg-[#171D3D]"
+                                      : "font-semibold  text-[#52566f]"
+                                  }`}
+                                  onClick={() => {
+                                    setValue("cloud");
+                                    setServiceType("cloud");
+                                    setCheck("cloud");
+                                  }}
+                                >
+                                  Cloud Services
+                                </button>
+                              </div>
                             </div>
                           </div>
-                          <div
-                            className={`${
-                              value === "cloud"
-                                ? "bg-gradient-to-tr from-[#000D33] via-[#9A9A9A] to-[#000D33] p-0.5 rounded text-center shadow-md shadow-[#3c2693]"
-                                : null
-                            }`}
-                          >
-                            <div className="bg-[#060b28] rounded">
-                              <button
-                                type="button"
-                                className={`px-4 py-2 rounded uppercase text-xs ${
-                                  value === "cloud"
-                                    ? " text-[#77FFCE] bg-[#171D3D]"
-                                    : "font-semibold  text-[#52566f]"
-                                }`}
-                                onClick={() => {
-                                  setValue("cloud");
-                                  setServiceType("cloud");
-                                  setCheck("cloud")
-                                }}
-                              >
-                                Cloud Services
-                              </button>
-                            </div>
-                          </div>
-             
                         </div>
-                       </div>
                       </div>
                     )}
                   </Field>
 
-                  {check === "cloud"  && (
+                  {check === "cloud" && (
                     <div className="ml-4 mb-4">
-                      <div className="text-xs text-[#5D7285] mb-1">Type your Public Node IP address</div>
-                      <div className="bg-gradient-to-tr from-[#000D33] p-0.5 via-[#9A9A9A] to-[#000D33]  rounded w-7/12">
-                      <div className="bg-[#060C2D] w-full flex justify-between rounded">
-                      <input
-                        type="text"
-                        value={ip}
-                        onChange={handleIpChange}
-                        placeholder="192.0.0.0"
-                        className="bg-[#060C2D] text-[#77FFCE] p-2 rounded-md"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleSaveIp}
-                        className="bg-[#060C2D] text-[#1c1f2b] px-4 py-2 rounded-md"
-                      >
-                        <Save/>
-                      </button>
+                      <div className="text-xs text-[#5D7285] mb-1">
+                        Type your Public Node IP address
                       </div>
+                      <div className="bg-gradient-to-tr from-[#000D33] p-0.5 via-[#9A9A9A] to-[#000D33] rounded w-7/12">
+                        <div className="bg-[#060C2D] w-full flex items-center rounded">
+                          <input
+                            type="text"
+                            value={ip}
+                            onChange={handleIpChange}
+                            placeholder="192.0.0.0"
+                            className="bg-[#060C2D] text-[#77FFCE] p-2 rounded-md w-full no-focus-border outline-none border-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleSaveIp}
+                            className="bg-[#060C2D] text-[#1c1f2b] px-4 py-2 rounded-md"
+                          >
+                            <Save />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
-
 
                   <div className="text-xs text-[#5D7285] ml-4">
                     If you opt for the GPU Worker but your device lacks a GPU,
@@ -195,7 +201,12 @@ export function SecondForm({
 
                     <div className="flex justify-end mt-4">
                       <ButtonV2>
-                        <button type="submit" disabled={serviceType === "cloud" && !publicNodeIP}>NEXT STEP</button>
+                        <button
+                          type="submit"
+                          disabled={check === "cloud" && !ip}
+                        >
+                          NEXT STEP
+                        </button>
                       </ButtonV2>
                     </div>
                   </div>
