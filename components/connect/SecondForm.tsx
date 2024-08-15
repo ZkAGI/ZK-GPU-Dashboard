@@ -24,7 +24,6 @@ export function SecondForm({
   } = useConnectStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [ip, setIp] = useState("");
-  const [check, setCheck] = useState("");
 
   useEffect(() => {
     if (!serviceType) {
@@ -51,7 +50,7 @@ export function SecondForm({
   };
 
   const handleNext = () => {
-    if (check === "cloud" && !ip) {
+    if (serviceType === "cloud" && !publicNodeIP) {
       toast.error("Please add an IP address before proceeding.");
     } else {
       onNext();
@@ -102,7 +101,6 @@ export function SecondForm({
                                   onClick={() => {
                                     setValue("local");
                                     setServiceType("local");
-                                    setCheck("local");
                                   }}
                                 >
                                   Local PC
@@ -127,7 +125,6 @@ export function SecondForm({
                                   onClick={() => {
                                     setValue("cloud");
                                     setServiceType("cloud");
-                                    setCheck("cloud");
                                   }}
                                 >
                                   Cloud Services
@@ -140,7 +137,7 @@ export function SecondForm({
                     )}
                   </Field>
 
-                  {check === "cloud" && (
+                  {serviceType === "cloud" && (
                     <div className="ml-4 mb-4">
                       <div className="text-xs text-[#5D7285] mb-1">
                         Type your Public Node IP address
@@ -204,7 +201,7 @@ export function SecondForm({
                       <ButtonV2>
                         <button
                           type="submit"
-                         disabled={check === "cloud" && !ip}
+                         disabled={serviceType === "cloud" && !ip}
                         >
                           NEXT STEP
                         </button>
