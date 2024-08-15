@@ -32,6 +32,7 @@ export function SecondForm({
     }
   }, [serviceType, setServiceType]);
 
+
   const filteredGpuNames = gpuNames.filter((name) =>
     name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -203,7 +204,7 @@ export function SecondForm({
                       <ButtonV2>
                         <button
                           type="submit"
-                          disabled={check === "cloud" && !ip}
+                         disabled={check === "cloud" && !ip}
                         >
                           NEXT STEP
                         </button>

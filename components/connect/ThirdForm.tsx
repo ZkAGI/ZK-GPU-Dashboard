@@ -45,6 +45,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
   const [isConnecting, setIsConnecting] = useState(false);
   const { deviceName } = useFormStore();
 
+
   useEffect(() => {
     const summary: SummaryItem[] | undefined = data?.data?.summary;
 
@@ -270,7 +271,7 @@ export function ThirdForm({ onNext }: { onNext: () => any }) {
                         }
                       >
                         <div className="border border-[#858699] p-2 rounded-md mx-10 my-2 text-[#858699] flex flex-row items-center justify-between">
-                          <div className="w-3/4 text-xs overflow-x-scroll">
+                          <div className="w-3/4 text-xs overflow-x-hidden">
                             {dockerRunCommand}
                           </div>
                           <div className=" p-1">

@@ -19,7 +19,7 @@ export const useConnectStore = create<ConnectState>((set) => ({
   setDeviceType: (type: string) => 
     set((state) => ({ deviceType: type })),
   setServiceType: (type: string) => 
-    set((state) => ({ publicNodeIP: type })),
+    set((state) => ({ serviceType: type })),
   setPublicNodeIP: (ip: string) => 
     set((state) => ({ publicNodeIP: ip })),
   setFormValues: (values: any) => 
