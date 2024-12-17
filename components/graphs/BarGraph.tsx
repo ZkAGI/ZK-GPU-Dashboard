@@ -13,17 +13,22 @@ interface BarChartProps {
   filter: 'day' | 'week' | 'month';
 }
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string, filter: 'day' | 'week' | 'month') => {
   const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  return `${day}/${month}`;
+  if (filter === 'month') {
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return monthNames[date.getMonth()];
+  } else {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${day}/${month}`;
+  }
 };
 
 const BarChart: React.FC<BarChartProps> = ({ data, filter }) => {
   const formattedData = data.map(datum => ({
     ...datum,
-    time: datum.time.includes('/') ? datum.time : formatDate(datum.time),
+    time: formatDate(datum.time, filter),
   }));
 
   const maxY = Math.max(...formattedData.map(datum => datum.value));
@@ -52,7 +57,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, filter }) => {
       keys={['value']}
       indexBy="time"
       margin={{ top: 30, right: 50, bottom: 50, left: 70 }}
-      padding={0.8} 
+      padding={0.8}
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}
       colors="#FFFFFF"
@@ -67,6 +72,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, filter }) => {
         legend: axisBottomLegend,
         legendPosition: 'middle',
         legendOffset: 42,
+        format: (value) => value,
       }}
       axisLeft={{
         tickSize: 0,

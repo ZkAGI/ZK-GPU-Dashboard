@@ -16,20 +16,44 @@ interface LineChartProps {
   filter: 'day' | 'week' | 'month';
 }
 
-const formatDate = (dateString: string) => {
+// const formatDate = (dateString: string) => {
+//   const date = new Date(dateString);
+//   const day = String(date.getDate()).padStart(2, '0');
+//   const month = String(date.getMonth() + 1).padStart(2, '0');
+//   return `${day}/${month}`;
+// };
+
+const formatDate = (dateString: string, filter: 'day' | 'week' | 'month') => {
   const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  return `${day}/${month}`;
+  if (filter === 'month') {
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return monthNames[date.getMonth()];
+  } else if (filter === 'week') {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${day}/${month}`;
+  } else {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${day}/${month}`;
+  }
 };
 
 const LineChart: React.FC<LineChartProps> = ({ data, filter }) => {
+  // const formattedData = data.map(series => ({
+  //   ...series,
+  //   data: series.data.map(datum => ({
+  //     ...datum,
+  //     x: datum.x.includes('/') ? datum.x : formatDate(datum.x),
+  //   })).sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()), // Sort the data by date
+  // }));
+
   const formattedData = data.map(series => ({
     ...series,
     data: series.data.map(datum => ({
       ...datum,
-      x: datum.x.includes('/') ? datum.x : formatDate(datum.x),
-    })).sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()), // Sort the data by date
+      x: formatDate(datum.x, filter),
+    })),
   }));
 
   const maxY = Math.max(...formattedData.flatMap(series => series.data.map(datum => datum.y)));
@@ -85,12 +109,12 @@ const LineChart: React.FC<LineChartProps> = ({ data, filter }) => {
       }}
       axisLeft={{
         tickSize: 0,
-        tickPadding: 30,
+        tickPadding: 20,
         tickRotation: 0,
         legend: 'GPU Nodes',
         legendOffset: -52,
         legendPosition: 'middle',
-        tickValues: generateTickValues(maxY, 2),
+        tickValues: generateTickValues(maxY, 5),
       }}
       theme={{
         axis: {
