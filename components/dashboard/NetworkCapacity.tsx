@@ -17,7 +17,11 @@ const TotalNetworkCapacity: React.FC = () => {
   const { wallet } = useWallet();
   const walletAddress = wallet?.adapter?.publicKey?.toString();
 
-  const sortedData = Array.isArray(data) ? [...data].sort((a, b) => b. total_xp - a. total_xp) : [];
+  const sortedData = Array.isArray(data)
+    ? Array.from(
+      new Map(data.map((item) => [item.wallet_address, item])).values()
+    ).sort((a, b) => b.total_xp - a.total_xp)
+    : [];
 
   const userIndex = sortedData.findIndex(
     (item) => item.wallet_address === walletAddress
@@ -58,20 +62,17 @@ const TotalNetworkCapacity: React.FC = () => {
           {sortedData.slice(0, 3).map((item, index) => (
             <div
               key={index}
-              className={`bg-[#171D3D] flex flex-col ${
-                index === 0 ? "h-full" : index === 1 ? "h-[96px]" : "h-[80px]"
-              } justify-center items-center p${
-                index !== 2 ? "x-2" : ""
-              } rounded-t-full flex-grow`}
+              className={`bg-[#171D3D] flex flex-col ${index === 0 ? "h-full" : index === 1 ? "h-[96px]" : "h-[80px]"
+                } justify-center items-center p${index !== 2 ? "x-2" : ""
+                } rounded-t-full flex-grow`}
             >
               <div
-                className={`size-12 flex flex-col justify-between text-center pt-3 transform rotate-45 rounded-xl ${
-                  index === 0
-                    ? "-translate-y-6"
-                    : index === 1
+                className={`size-12 flex flex-col justify-between text-center pt-3 transform rotate-45 rounded-xl ${index === 0
+                  ? "-translate-y-6"
+                  : index === 1
                     ? "-translate-y-5"
                     : "-translate-y-3"
-                } ${index === 2 ? "shrink-0" : ""}`}
+                  } ${index === 2 ? "shrink-0" : ""}`}
                 style={{ backgroundColor: index === 0 ? "#9747FF" : "#6F43F3" }}
               >
                 <div className="transform -rotate-45">{index + 1}</div>
@@ -95,7 +96,7 @@ const TotalNetworkCapacity: React.FC = () => {
             sortedData
               .slice(Math.max(0, userIndex - 1), userIndex + 2)
               .map(renderLeaderboardItem)} */}
-              {userIndex !== -1 ? (
+          {userIndex !== -1 ? (
             sortedData
               .slice(Math.max(0, userIndex - 1), userIndex + 2)
               .map(renderLeaderboardItem)
