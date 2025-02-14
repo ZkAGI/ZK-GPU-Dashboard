@@ -48,11 +48,10 @@ export function SidebarItem(props: SidebarItemProps) {
   const content = (
     <Link href={href || "#"} passHref>
       <div
-        className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${
-          disabled
+        className={`py-2 px-4 rounded-md transition-colors flex space-x-2 items-center ${disabled
             ? "text-gray-500 cursor-default"
             : "text-white hover:bg-[#643ADE] cursor-pointer"
-        }`}
+          }`}
         onClick={onClick}
       >
         {icon && (
@@ -93,6 +92,7 @@ export function Sidebar() {
                   icon={<item.icon />}
                   disabled={
                     item.name === "Serve" ||
+                    item.name === "Profile" ||
                     item.name === "Settings" ||
                     item.name === "Actors" ||
                     item.name === "Matrics" ||
