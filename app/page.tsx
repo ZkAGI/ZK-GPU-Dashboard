@@ -34,22 +34,22 @@ export default function Home() {
                 <NetworkCapacity />
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-2 w-full">
+            <div className="flex flex-col lg:flex-row gap-2 w-full mb-7">
               <div className=" text-white rounded-lg p-1 flex-grow">
                 <GPUNodesUtilization />
               </div>
-                <div className=" text-white rounded-lg p-1 flex-grow">
-                  <GPUCapacity />
-                </div>
-                <div className=" text-white rounded-lg p-1 flex-grow">
-                  <Utilization />
+              <div className=" text-white rounded-lg p-1 flex-grow">
+                <GPUCapacity />
+              </div>
+              <div className=" text-white rounded-lg p-1 flex-grow">
+                <Utilization />
               </div>
             </div>
-            <div className=" p-2">
+            {/* <div className=" p-2">
               <div className="col-span-3 text-white rounded-lg p-1">
                 <Events />
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <WelcomeSection />
@@ -60,7 +60,7 @@ export default function Home() {
       </div>
       <div className="flex flex-col justify-center items-center">
         <div className="mt-2 border-[#ffffff1b] border-b w-1/2 "> </div>
-        <div className="text-white my-5">@ ZkAGI 2024</div>
+        <div className="text-white my-5 font-ttfirs">@ZkAGI 2025</div>
       </div>
     </div>
   );
