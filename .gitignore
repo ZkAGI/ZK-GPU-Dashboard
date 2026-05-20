@@ -36,3 +36,12 @@ yarn-error.log*
 next-env.d.ts
 
 package-lock.json
+.env
+.env.*
+!.env.example
+!.env.sample
+oauth_credentials.json
+management-session.json
+logs/
+__pycache__/
+*.pyc
